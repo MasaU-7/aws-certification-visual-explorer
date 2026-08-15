@@ -1,26 +1,21 @@
-import { Html } from '@react-three/drei'
+import { Edges, Html } from '@react-three/drei'
 import { serviceIcons } from '@/data/icons'
-import { getServiceLayoutPosition } from '@/scene/layout/serviceLayout'
 import { useExplorerStore } from '@/store/explorerStore'
 import type { AwsService } from '@/types/aws'
 
-interface ServiceNodeProps {
+interface GhostServiceNodeProps {
   service: AwsService
-  index: number
-  total: number
-  origin: [number, number, number]
+  position: [number, number, number]
 }
 
-export function ServiceNode({ service, index, total, origin }: ServiceNodeProps) {
+export function GhostServiceNode({ service, position }: GhostServiceNodeProps) {
   const selectService = useExplorerStore((s) => s.selectService)
   const selectedServiceId = useExplorerStore((s) => s.selectedServiceId)
   const isSelected = selectedServiceId === service.id
   const Icon = serviceIcons[service.id]
 
-  const [x, y, z] = getServiceLayoutPosition(index, total, origin)
-
   return (
-    <group position={[x, y, z]}>
+    <group position={position} scale={isSelected ? 0.95 : 0.88}>
       <mesh
         onClick={(e) => {
           e.stopPropagation()
@@ -35,34 +30,33 @@ export function ServiceNode({ service, index, total, origin }: ServiceNodeProps)
       >
         <boxGeometry args={[0.5, 0.5, 0.12]} />
         <meshStandardMaterial
-          color={isSelected ? '#ffffff' : '#101820'}
+          color={isSelected ? '#ffffff' : '#0a1018'}
           emissive={service.visual.color}
-          emissiveIntensity={isSelected ? 0.45 : 0.15}
-          roughness={0.5}
+          emissiveIntensity={isSelected ? 0.35 : 0.08}
+          roughness={0.6}
           transparent
-          opacity={0.85}
+          opacity={isSelected ? 0.7 : 0.42}
+        />
+        <Edges
+          color={isSelected ? '#b8dcff' : '#5a7a9a'}
+          threshold={15}
+          linewidth={1}
         />
       </mesh>
 
       {Icon && (
         <Html center distanceFactor={9} style={{ pointerEvents: 'none' }}>
-          <div className="scene-icon scene-icon--service">
-            <Icon size={40} />
+          <div
+            className={`scene-icon scene-icon--service scene-icon--ghost${isSelected ? ' is-selected' : ''}`}
+          >
+            <Icon size={36} />
           </div>
         </Html>
       )}
 
       <Html center distanceFactor={10} style={{ pointerEvents: 'none' }}>
         <div
-          style={{
-            color: '#fff',
-            fontSize: '11px',
-            fontWeight: 600,
-            whiteSpace: 'nowrap',
-            textShadow: '0 1px 6px rgba(0,0,0,0.9)',
-            transform: 'translateY(34px)',
-            userSelect: 'none',
-          }}
+          className={`scene-label scene-label--ghost${isSelected ? ' is-selected' : ''}`}
         >
           {service.name}
         </div>

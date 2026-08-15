@@ -4,13 +4,17 @@ import { Suspense, useMemo } from 'react'
 import { categoryNodes } from '@/data/categories'
 import { getServicesForCertification } from '@/data/services'
 import { useExplorerStore } from '@/store/explorerStore'
+import { buildRelationshipGraph } from '@/scene/layout/relatedServices'
 import { CategoryOrb } from './nodes/CategoryOrb'
+import { GhostServiceNode } from './nodes/GhostServiceNode'
 import { ServiceNode } from './nodes/ServiceNode'
+import { ServiceEdges } from './edges/ServiceEdges'
 import { WorldEdges } from './edges/WorldEdges'
 
 function WorldContent() {
   const certificationId = useExplorerStore((s) => s.certificationId)
   const selectedCategoryId = useExplorerStore((s) => s.selectedCategoryId)
+  const selectedServiceId = useExplorerStore((s) => s.selectedServiceId)
   const selectCategory = useExplorerStore((s) => s.selectCategory)
 
   const certServices = useMemo(
@@ -31,10 +35,31 @@ function WorldContent() {
     return counts
   }, [certServices])
 
+  const certServiceIds = useMemo(() => new Set(certServices.map((s) => s.id)), [certServices])
+
   const selectedCategory = categoryNodes.find((n) => n.id === selectedCategoryId)
   const servicesInCategory = selectedCategory
     ? certServices.filter((s) => s.category === selectedCategory.id)
     : []
+
+  const relationshipGraph = useMemo(() => {
+    if (!selectedCategory) {
+      return { ghosts: [], edges: [] }
+    }
+    return buildRelationshipGraph(
+      selectedServiceId,
+      servicesInCategory,
+      selectedCategory.position,
+      certServiceIds,
+      certServices,
+    )
+  }, [
+    selectedCategory,
+    selectedServiceId,
+    servicesInCategory,
+    certServiceIds,
+    certServices,
+  ])
 
   return (
     <>
@@ -59,16 +84,23 @@ function WorldContent() {
         )
       })}
 
-      {selectedCategory &&
-        servicesInCategory.map((service, index) => (
-          <ServiceNode
-            key={service.id}
-            service={service}
-            index={index}
-            total={servicesInCategory.length}
-            origin={selectedCategory.position}
-          />
-        ))}
+      {selectedCategory && (
+        <>
+          <ServiceEdges edges={relationshipGraph.edges} />
+          {relationshipGraph.ghosts.map(({ service, position }) => (
+            <GhostServiceNode key={`ghost-${service.id}`} service={service} position={position} />
+          ))}
+          {servicesInCategory.map((service, index) => (
+            <ServiceNode
+              key={service.id}
+              service={service}
+              index={index}
+              total={servicesInCategory.length}
+              origin={selectedCategory.position}
+            />
+          ))}
+        </>
+      )}
 
       <mesh
         position={[0, -4.5, 0]}
