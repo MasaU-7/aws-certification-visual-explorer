@@ -1,4 +1,5 @@
 import { Html } from '@react-three/drei'
+import { categoryIcons } from '@/data/icons'
 import { useExplorerStore } from '@/store/explorerStore'
 import type { CategoryNode } from '@/types/aws'
 
@@ -13,6 +14,7 @@ export function CategoryOrb({ node, active, dimmed, serviceCount }: CategoryOrbP
   const selectCategory = useExplorerStore((s) => s.selectCategory)
   const selectedCategoryId = useExplorerStore((s) => s.selectedCategoryId)
   const isSelected = selectedCategoryId === node.id
+  const Icon = categoryIcons[node.id]
 
   const opacity = dimmed ? 0.18 : active ? 1 : 0.35
   const scale = isSelected ? 1.25 : 1
@@ -42,6 +44,19 @@ export function CategoryOrb({ node, active, dimmed, serviceCount }: CategoryOrbP
           metalness={0.2}
         />
       </mesh>
+
+      <Html center distanceFactor={10} style={{ pointerEvents: 'none' }}>
+        <div
+          className="scene-icon"
+          style={{
+            opacity: dimmed ? 0.25 : 1,
+            filter: dimmed ? 'grayscale(1)' : 'none',
+          }}
+        >
+          <Icon size={36} />
+        </div>
+      </Html>
+
       <Html center distanceFactor={12} style={{ pointerEvents: 'none' }}>
         <div
           style={{
@@ -53,7 +68,7 @@ export function CategoryOrb({ node, active, dimmed, serviceCount }: CategoryOrbP
             textAlign: 'center',
             whiteSpace: 'nowrap',
             textShadow: '0 1px 8px rgba(0,0,0,0.8)',
-            transform: 'translateY(42px)',
+            transform: 'translateY(48px)',
             userSelect: 'none',
           }}
         >

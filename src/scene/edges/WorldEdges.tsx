@@ -1,15 +1,24 @@
 import { Line } from '@react-three/drei'
 import type { CategoryNode } from '@/types/aws'
 
+/**
+ * Category 関係線 — 「依存・通信のハブ」として Networking を中心に。
+ * サービス間の詳細エッジは Phase 2 で data/relationships へ移す。
+ */
 const EDGES: Array<[CategoryNode['id'], CategoryNode['id']]> = [
+  // hub
   ['cdn', 'network'],
   ['compute', 'network'],
-  ['network', 'security'],
-  ['network', 'database'],
-  ['network', 'storage'],
+  ['storage', 'network'],
+  ['database', 'network'],
+  ['security', 'network'],
+  // spokes that commonly co-design with compute
   ['compute', 'database'],
   ['compute', 'integration'],
+  ['storage', 'cdn'],
+  // ops / identity orbit
   ['security', 'management'],
+  ['compute', 'management'],
 ]
 
 interface WorldEdgesProps {

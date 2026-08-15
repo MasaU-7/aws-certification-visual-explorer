@@ -1,4 +1,5 @@
 import { getServiceById } from '@/data/services'
+import { serviceIcons } from '@/data/icons'
 import { useExplorerStore } from '@/store/explorerStore'
 
 export function ServiceInspector() {
@@ -10,14 +11,22 @@ export function ServiceInspector() {
   const service = getServiceById(selectedServiceId)
   if (!service) return null
 
+  const Icon = serviceIcons[service.id]
+
   return (
     <aside className="inspector" aria-label="サービス関係">
       <header className="inspector__header">
-        <div
-          className="inspector__swatch"
-          style={{ background: service.visual.color }}
-          aria-hidden
-        />
+        {Icon ? (
+          <span className="inspector__icon" aria-hidden>
+            <Icon size={28} />
+          </span>
+        ) : (
+          <div
+            className="inspector__swatch"
+            style={{ background: service.visual.color }}
+            aria-hidden
+          />
+        )}
         <h2>{service.name}</h2>
         <button type="button" className="inspector__close" onClick={() => selectService(null)}>
           ×
@@ -27,20 +36,28 @@ export function ServiceInspector() {
       <section>
         <h3>つながる先</h3>
         <ul className="chip-list">
-          {service.relationships.map((rel) => (
-            <li key={rel}>
-              <button
-                type="button"
-                className="rel-chip"
-                onClick={() => {
-                  const target = getServiceById(rel)
-                  if (target) selectService(target.id)
-                }}
-              >
-                {rel}
-              </button>
-            </li>
-          ))}
+          {service.relationships.map((rel) => {
+            const RelIcon = serviceIcons[rel]
+            return (
+              <li key={rel}>
+                <button
+                  type="button"
+                  className="rel-chip"
+                  onClick={() => {
+                    const target = getServiceById(rel)
+                    if (target) selectService(target.id)
+                  }}
+                >
+                  {RelIcon && (
+                    <span className="rel-chip__icon" aria-hidden>
+                      <RelIcon size={16} />
+                    </span>
+                  )}
+                  {rel}
+                </button>
+              </li>
+            )
+          })}
         </ul>
       </section>
 

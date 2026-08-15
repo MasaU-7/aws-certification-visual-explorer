@@ -22,6 +22,7 @@ export function AppShell() {
       <main className="stage">
         <WorldScene />
         <div className="stage-caption">
+          <p className="stage-caption__world">AWS World</p>
           <p className="stage-caption__cert">{cert?.fullName ?? certificationId}</p>
           <p className="stage-caption__hint">カテゴリを選ぶ → サービスが現れる</p>
         </div>

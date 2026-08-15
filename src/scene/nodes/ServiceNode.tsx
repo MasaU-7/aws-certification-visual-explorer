@@ -1,4 +1,5 @@
 import { Html } from '@react-three/drei'
+import { serviceIcons } from '@/data/icons'
 import { useExplorerStore } from '@/store/explorerStore'
 import type { AwsService } from '@/types/aws'
 
@@ -13,6 +14,7 @@ export function ServiceNode({ service, index, total, origin }: ServiceNodeProps)
   const selectService = useExplorerStore((s) => s.selectService)
   const selectedServiceId = useExplorerStore((s) => s.selectedServiceId)
   const isSelected = selectedServiceId === service.id
+  const Icon = serviceIcons[service.id]
 
   const angle = (index / Math.max(total, 1)) * Math.PI * 2 - Math.PI / 2
   const radius = 1.8
@@ -34,14 +36,25 @@ export function ServiceNode({ service, index, total, origin }: ServiceNodeProps)
           document.body.style.cursor = 'default'
         }}
       >
-        <boxGeometry args={[0.45, 0.45, 0.45]} />
+        <boxGeometry args={[0.5, 0.5, 0.12]} />
         <meshStandardMaterial
-          color={service.visual.color}
+          color={isSelected ? '#ffffff' : '#101820'}
           emissive={service.visual.color}
-          emissiveIntensity={isSelected ? 0.6 : 0.2}
-          roughness={0.4}
+          emissiveIntensity={isSelected ? 0.45 : 0.15}
+          roughness={0.5}
+          transparent
+          opacity={0.85}
         />
       </mesh>
+
+      {Icon && (
+        <Html center distanceFactor={9} style={{ pointerEvents: 'none' }}>
+          <div className="scene-icon scene-icon--service">
+            <Icon size={40} />
+          </div>
+        </Html>
+      )}
+
       <Html center distanceFactor={10} style={{ pointerEvents: 'none' }}>
         <div
           style={{
@@ -50,7 +63,7 @@ export function ServiceNode({ service, index, total, origin }: ServiceNodeProps)
             fontWeight: 600,
             whiteSpace: 'nowrap',
             textShadow: '0 1px 6px rgba(0,0,0,0.9)',
-            transform: 'translateY(28px)',
+            transform: 'translateY(34px)',
             userSelect: 'none',
           }}
         >

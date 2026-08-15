@@ -9,6 +9,7 @@
 | 3D | Three.js + React Three Fiber + Drei | 3D表現の標準、React と親和 |
 | 状態 | Zustand | 軽量、バックエンド不要に十分 |
 | データ | `src/data/**` TypeScript | Git 管理・レビュー容易・無料 |
+| アイコン | AWS Architecture Icons（`aws-react-icons`） | 公式セット準拠・無料利用可 |
 | ホスト | GitHub Pages（または Cloudflare Pages） | 無料・CI なしでも可 |
 | リポジトリ | GitHub + Git Flow | 無料・可視化・協働 |
 

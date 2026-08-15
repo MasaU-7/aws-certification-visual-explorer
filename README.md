@@ -28,6 +28,7 @@ npm run dev
 - React Three Fiber / Three.js
 - Zustand
 - 静的ホスティング（GitHub Pages 想定）
+- アイコン: [AWS Architecture Icons](https://aws.amazon.com/architecture/icons/)（`aws-react-icons` 経由）
 
 ## ブランチ
 
