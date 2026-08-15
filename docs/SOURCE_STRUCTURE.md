@@ -17,10 +17,13 @@ aws-certification-visual-explorer/
 │   │   ├── certifications/
 │   │   ├── services/
 │   │   ├── scenarios/
+│   │   ├── vpc/
 │   │   └── categories.ts
 │   ├── scene/              # R3F / Three 空間
 │   │   ├── nodes/
 │   │   ├── edges/
+│   │   ├── layout/
+│   │   ├── vpc/
 │   │   └── WorldScene.tsx
 │   ├── store/              # Zustand
 │   ├── styles/

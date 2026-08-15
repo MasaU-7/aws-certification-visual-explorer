@@ -17,6 +17,8 @@ import ArchitectureServiceAmazonSimpleNotificationService from 'aws-react-icons/
 import ArchitectureServiceAmazonSimpleQueueService from 'aws-react-icons/icons/ArchitectureServiceAmazonSimpleQueueService'
 import ArchitectureServiceAmazonSimpleStorageService from 'aws-react-icons/icons/ArchitectureServiceAmazonSimpleStorageService'
 import ArchitectureServiceAmazonVirtualPrivateCloud from 'aws-react-icons/icons/ArchitectureServiceAmazonVirtualPrivateCloud'
+import ResourceAmazonVPCInternetGateway from 'aws-react-icons/icons/ResourceAmazonVPCInternetGateway'
+import ResourceAmazonVPCNATGateway from 'aws-react-icons/icons/ResourceAmazonVPCNATGateway'
 import ArchitectureServiceAWSIdentityandAccessManagement from 'aws-react-icons/icons/ArchitectureServiceAWSIdentityandAccessManagement'
 import ArchitectureServiceAWSLambda from 'aws-react-icons/icons/ArchitectureServiceAWSLambda'
 import ArchitectureServiceElasticLoadBalancing from 'aws-react-icons/icons/ArchitectureServiceElasticLoadBalancing'
@@ -51,4 +53,9 @@ export const serviceIcons: Record<string, AwsIcon> = {
   sqs: ArchitectureServiceAmazonSimpleQueueService,
   sns: ArchitectureServiceAmazonSimpleNotificationService,
   cloudwatch: ArchitectureServiceAmazonCloudWatch,
+}
+
+export const fixtureIcons: Record<'igw' | 'nat', AwsIcon> = {
+  igw: ResourceAmazonVPCInternetGateway,
+  nat: ResourceAmazonVPCNATGateway,
 }

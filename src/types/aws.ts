@@ -26,6 +26,40 @@ export type VisualShape =
 
 export type AppMode = 'explore' | 'scenario' | 'architecture'
 
+export type SceneView = 'world' | 'vpc-city'
+
+export type AvailabilityZoneId = 'az-a' | 'az-b'
+
+export type SubnetTier = 'public' | 'private'
+
+export type CityOccupantKind = 'internet' | 'igw' | 'nat' | 'service'
+
+export type CityFlowRole = 'ingress' | 'app' | 'data' | 'egress'
+
+export interface CityOccupant {
+  id: string
+  kind: CityOccupantKind
+  label: string
+  az: AvailabilityZoneId | null
+  tier: SubnetTier | null
+  /** Present when the occupant is an existing AwsService */
+  serviceId?: string
+}
+
+export interface CityFlow {
+  id: string
+  from: string
+  to: string
+  role: CityFlowRole
+}
+
+export interface VpcCityDefinition {
+  id: string
+  azs: AvailabilityZoneId[]
+  occupants: CityOccupant[]
+  flows: CityFlow[]
+}
+
 export interface ServiceVisual {
   type: VisualShape
   color: string

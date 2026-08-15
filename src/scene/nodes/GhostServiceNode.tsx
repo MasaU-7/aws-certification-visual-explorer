@@ -9,7 +9,7 @@ interface GhostServiceNodeProps {
 }
 
 export function GhostServiceNode({ service, position }: GhostServiceNodeProps) {
-  const selectService = useExplorerStore((s) => s.selectService)
+  const clickService = useExplorerStore((s) => s.clickService)
   const selectedServiceId = useExplorerStore((s) => s.selectedServiceId)
   const isSelected = selectedServiceId === service.id
   const Icon = serviceIcons[service.id]
@@ -19,7 +19,7 @@ export function GhostServiceNode({ service, position }: GhostServiceNodeProps) {
       <mesh
         onClick={(e) => {
           e.stopPropagation()
-          selectService(isSelected ? null : service.id)
+          clickService(service.id)
         }}
         onPointerOver={() => {
           document.body.style.cursor = 'pointer'

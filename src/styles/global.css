@@ -159,6 +159,22 @@ button:disabled {
   color: var(--text-muted);
 }
 
+.stage-caption__back {
+  pointer-events: auto;
+  display: inline-block;
+  margin-top: 0.7rem;
+  padding: 0.32rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.75rem;
+}
+
+.stage-caption__back:hover {
+  background: var(--accent-soft);
+  border-color: rgba(61, 139, 253, 0.45);
+}
+
 .scene-icon {
   display: grid;
   place-items: center;
@@ -200,6 +216,50 @@ button:disabled {
   color: #fff;
 }
 
+.scene-label--city {
+  transform: translateY(32px);
+}
+
+.city-sign {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85);
+}
+
+.city-sign--az {
+  color: #e8a317;
+}
+
+.city-sign--public {
+  color: #5dce8a;
+}
+
+.city-sign--private {
+  color: #7eb4ea;
+}
+
+.city-sign--vpc {
+  color: #c4b0ff;
+  font-size: 13px;
+}
+
+.loc-chip--public {
+  border-color: rgba(63, 163, 106, 0.55);
+}
+
+.loc-chip--private {
+  border-color: rgba(61, 126, 201, 0.55);
+}
+
+.loc-chip--az-a,
+.loc-chip--az-b {
+  border-color: rgba(232, 163, 23, 0.5);
+}
+
 .inspector__icon {
   display: grid;
   place-items: center;
@@ -231,8 +291,8 @@ button:disabled {
   padding: 1rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  background: var(--bg-elevated);
-  backdrop-filter: blur(14px);
+  background: rgba(12, 18, 32, 0.42);
+  backdrop-filter: blur(16px);
   z-index: 2;
 }
 
