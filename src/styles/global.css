@@ -1,0 +1,240 @@
+:root {
+  --bg: #070b14;
+  --bg-elevated: rgba(12, 18, 32, 0.82);
+  --border: rgba(140, 180, 255, 0.18);
+  --text: #e8eef8;
+  --text-muted: #8a9bb3;
+  --accent: #3d8bfd;
+  --accent-soft: rgba(61, 139, 253, 0.2);
+  --danger: #dd344c;
+  --radius: 12px;
+  --font: "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+}
+
+.top-bar,
+.bottom-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--bg-elevated);
+  border-color: var(--border);
+  backdrop-filter: blur(12px);
+  z-index: 2;
+}
+
+.top-bar {
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.bottom-bar {
+  justify-content: center;
+  border-top: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+}
+
+.brand__mark {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ff9900;
+}
+
+.brand__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cert-bar,
+.mode-bar {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.cert-chip,
+.mode-btn {
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.cert-chip:hover:not(:disabled),
+.mode-btn:hover:not(:disabled) {
+  background: var(--accent-soft);
+  border-color: rgba(61, 139, 253, 0.45);
+}
+
+.cert-chip.is-active,
+.mode-btn.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.stage {
+  position: relative;
+  min-height: 0;
+}
+
+.stage canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.stage-caption {
+  position: absolute;
+  left: 1.25rem;
+  top: 1rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.stage-caption__cert {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.stage-caption__hint {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.inspector {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: min(300px, calc(100% - 2rem));
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  backdrop-filter: blur(14px);
+  z-index: 2;
+}
+
+.inspector__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+}
+
+.inspector__header h2 {
+  margin: 0;
+  flex: 1;
+  font-size: 1.05rem;
+}
+
+.inspector__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.inspector__close {
+  font-size: 1.25rem;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.inspector__close:hover {
+  opacity: 1;
+}
+
+.inspector h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.inspector section + section {
+  margin-top: 0.9rem;
+}
+
+.chip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.rel-chip {
+  display: inline-block;
+  padding: 0.25rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.75rem;
+}
+
+.rel-chip:not(.is-static):hover {
+  border-color: rgba(61, 139, 253, 0.5);
+  background: var(--accent-soft);
+}
+
+@media (max-width: 720px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .inspector {
+    top: auto;
+    bottom: 4.5rem;
+  }
+}

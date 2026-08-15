@@ -1,0 +1,20 @@
+---
+description: 視覚学習 UI — テキスト最小化とデータ再利用
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Visual-First UI
+
+- サービス説明の長文を UI に出さない。関係・配置・動きで伝える
+- 新サービスは必ず `src/data/services` に定義し、scene / scenario から再利用する
+- `scene/` にビジネス文章を埋め込まない
+- インスペクタは「つながり」と「シナリオ」中心。定義文は書かない
+
+```tsx
+// ❌ BAD
+<p>EC2 は仮想サーバーです。インスタンスを起動できます...</p>
+
+// ✅ GOOD
+// EC2 ノードをクリック → リクエスト線が ALB から流れ、SG が壁として光る
+```

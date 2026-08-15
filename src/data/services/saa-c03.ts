@@ -1,0 +1,156 @@
+import type { AwsService } from '@/types/aws'
+
+/**
+ * MVP service set for SAA-C03.
+ * Keep textual hints minimal — visuals carry meaning.
+ */
+export const services: AwsService[] = [
+  {
+    id: 'ec2',
+    name: 'EC2',
+    category: 'compute',
+    visual: { type: 'server', color: '#ED7100', shape: 'instance' },
+    concepts: ['compute', 'instance', 'scaling', 'network'],
+    relationships: ['vpc', 'subnet', 'ebs', 'elb', 'autoscaling', 'iam', 'security-group'],
+    certifications: ['SAA-C03'],
+    scenarios: ['web-application', 'auto-scaling', 'high-availability'],
+  },
+  {
+    id: 'lambda',
+    name: 'Lambda',
+    category: 'compute',
+    visual: { type: 'function', color: '#ED7100', shape: 'function' },
+    concepts: ['compute', 'event', 'serverless'],
+    relationships: ['s3', 'dynamodb', 'sqs', 'sns', 'iam', 'apigateway'],
+    certifications: ['SAA-C03'],
+    scenarios: ['event-driven'],
+  },
+  {
+    id: 'elb',
+    name: 'ELB / ALB',
+    category: 'network',
+    visual: { type: 'network', color: '#8C4FFF', shape: 'balancer' },
+    concepts: ['load-balancing', 'availability', 'network'],
+    relationships: ['ec2', 'autoscaling', 'vpc', 'route53', 'security-group'],
+    certifications: ['SAA-C03'],
+    scenarios: ['web-application', 'high-availability'],
+  },
+  {
+    id: 'autoscaling',
+    name: 'Auto Scaling',
+    category: 'compute',
+    visual: { type: 'scale', color: '#ED7100', shape: 'group' },
+    concepts: ['scaling', 'elasticity', 'availability'],
+    relationships: ['ec2', 'elb', 'cloudwatch'],
+    certifications: ['SAA-C03'],
+    scenarios: ['auto-scaling', 'web-application'],
+  },
+  {
+    id: 'vpc',
+    name: 'VPC',
+    category: 'network',
+    visual: { type: 'network', color: '#8C4FFF', shape: 'city' },
+    concepts: ['network', 'isolation', 'subnet', 'routing'],
+    relationships: ['subnet', 'igw', 'nat', 'security-group', 'ec2', 'rds'],
+    certifications: ['SAA-C03'],
+    scenarios: ['web-application', 'high-availability'],
+  },
+  {
+    id: 'route53',
+    name: 'Route 53',
+    category: 'network',
+    visual: { type: 'edge', color: '#8C4FFF', shape: 'dns' },
+    concepts: ['dns', 'routing', 'failover'],
+    relationships: ['cloudfront', 'elb', 's3'],
+    certifications: ['SAA-C03'],
+    scenarios: ['web-application'],
+  },
+  {
+    id: 's3',
+    name: 'S3',
+    category: 'storage',
+    visual: { type: 'bucket', color: '#7AA116', shape: 'bucket' },
+    concepts: ['object-storage', 'durability', 'static-hosting'],
+    relationships: ['cloudfront', 'lambda', 'iam', 'ec2'],
+    certifications: ['SAA-C03'],
+    scenarios: ['web-application', 'static-site'],
+  },
+  {
+    id: 'rds',
+    name: 'RDS',
+    category: 'database',
+    visual: { type: 'database', color: '#C925D1', shape: 'rdb' },
+    concepts: ['database', 'multi-az', 'backup'],
+    relationships: ['vpc', 'subnet', 'security-group', 'iam'],
+    certifications: ['SAA-C03'],
+    scenarios: ['web-application', 'high-availability'],
+  },
+  {
+    id: 'dynamodb',
+    name: 'DynamoDB',
+    category: 'database',
+    visual: { type: 'database', color: '#C925D1', shape: 'nosql' },
+    concepts: ['database', 'serverless', 'scalability'],
+    relationships: ['lambda', 'iam'],
+    certifications: ['SAA-C03'],
+    scenarios: ['event-driven'],
+  },
+  {
+    id: 'iam',
+    name: 'IAM',
+    category: 'security',
+    visual: { type: 'identity', color: '#DD344C', shape: 'key' },
+    concepts: ['identity', 'permission', 'least-privilege'],
+    relationships: ['ec2', 's3', 'lambda', 'rds'],
+    certifications: ['SAA-C03'],
+    scenarios: ['web-application', 'secure-architecture'],
+  },
+  {
+    id: 'cloudfront',
+    name: 'CloudFront',
+    category: 'cdn',
+    visual: { type: 'edge', color: '#8C4FFF', shape: 'cdn' },
+    concepts: ['cdn', 'edge', 'caching'],
+    relationships: ['s3', 'elb', 'route53', 'acm'],
+    certifications: ['SAA-C03'],
+    scenarios: ['web-application', 'static-site'],
+  },
+  {
+    id: 'sqs',
+    name: 'SQS',
+    category: 'integration',
+    visual: { type: 'queue', color: '#E7157B', shape: 'queue' },
+    concepts: ['queue', 'decoupling', 'async'],
+    relationships: ['lambda', 'ec2', 'sns'],
+    certifications: ['SAA-C03'],
+    scenarios: ['event-driven'],
+  },
+  {
+    id: 'sns',
+    name: 'SNS',
+    category: 'integration',
+    visual: { type: 'topic', color: '#E7157B', shape: 'topic' },
+    concepts: ['pub-sub', 'fan-out', 'notification'],
+    relationships: ['sqs', 'lambda', 'http'],
+    certifications: ['SAA-C03'],
+    scenarios: ['event-driven'],
+  },
+  {
+    id: 'cloudwatch',
+    name: 'CloudWatch',
+    category: 'management',
+    visual: { type: 'monitor', color: '#E7157B', shape: 'metrics' },
+    concepts: ['monitoring', 'alarm', 'observability'],
+    relationships: ['ec2', 'autoscaling', 'lambda', 'elb'],
+    certifications: ['SAA-C03'],
+    scenarios: ['auto-scaling', 'web-application'],
+  },
+]
+
+export function getServiceById(id: string): AwsService | undefined {
+  return services.find((s) => s.id === id)
+}
+
+export function getServicesForCertification(certId: string): AwsService[] {
+  return services.filter((s) => s.certifications.includes(certId as AwsService['certifications'][number]))
+}

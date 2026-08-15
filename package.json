@@ -1,0 +1,31 @@
+{
+  "name": "aws-certification-visual-explorer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "AWS Certification Visual Explorer — learn AWS by behavior, not by reading",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "deploy": "npm run build && gh-pages -d dist"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
+    "@types/three": "^0.185.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "three": "^0.185.1",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.0.5",
+    "gh-pages": "^6.3.0",
+    "typescript": "~5.9.3",
+    "vite": "^8.2.0"
+  }
+}

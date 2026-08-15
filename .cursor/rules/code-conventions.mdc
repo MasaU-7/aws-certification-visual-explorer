@@ -1,0 +1,14 @@
+---
+description: TypeScript / React / R3F 実装規約
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Code Conventions
+
+- 関数コンポーネント + TypeScript strict
+- パスエイリアス `@/` を使う
+- 状態は Zustand（`src/store`）。不要なグローバル状態を増やさない
+- Three / R3F は `src/scene/**` に閉じる
+- `any` 禁止。データ型は `src/types/aws.ts` を拡張する
+- コメントは「なぜ」だけ。自明な説明コメントは書かない

@@ -1,0 +1,35 @@
+---
+description: AWS Visual Explorer のプロジェクト方針（無料・セキュア・Git Flow）
+alwaysApply: true
+---
+
+# Project Principles
+
+## コンセプト
+
+- 「説明」ではなく「挙動・構造」で理解させる
+- 用語辞典・長文レッスン・クイズ中心の LMS にしない
+- 資格はフィルター。世界マップは一つ
+
+## 完全無料
+
+- バックエンド / DB / Auth / 有料 API / 有料ホストを追加しない
+- データは `src/data/**` に置き Git 管理する
+- ホスティングは GitHub Pages / Cloudflare Pages 等の無料枠のみ
+
+## セキュア優先
+
+- 秘密情報・資格情報・`.env` 実値をコミットしない（原則不要）
+- 依存追加は最小限。不要なトラッカー・外部スクリプト禁止
+- ユーザー入力を扱う機能は導入時にサニタイズ前提で設計
+
+## Git Flow
+
+- 日常開発は `develop` 起点の `feature/*`
+- `main` はデプロイ可能状態のみ
+- 詳細は `docs/GIT_FLOW.md`
+
+## MVP
+
+- 対象は SAA-C03 のみ（他資格 UI はプレースホルダ可）
+- 詳細は `docs/MVP.md`
