@@ -6,17 +6,18 @@ import type { CategoryNode } from '@/types/aws'
  * サービス間の詳細エッジは Phase 2 で data/relationships へ移す。
  */
 const EDGES: Array<[CategoryNode['id'], CategoryNode['id']]> = [
-  // hub
   ['cdn', 'network'],
   ['compute', 'network'],
   ['storage', 'network'],
   ['database', 'network'],
   ['security', 'network'],
-  // spokes that commonly co-design with compute
+  ['analytics', 'network'],
   ['compute', 'database'],
   ['compute', 'integration'],
   ['storage', 'cdn'],
-  // ops / identity orbit
+  ['database', 'analytics'],
+  ['storage', 'analytics'],
+  ['cdn', 'security'],
   ['security', 'management'],
   ['compute', 'management'],
 ]

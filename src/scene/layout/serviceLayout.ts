@@ -1,20 +1,36 @@
 import type { AwsService } from '@/types/aws'
 
-/** カテゴリ球周囲のサービスリング半径 */
-export const SERVICE_RING_RADIUS = 1.8
+/** カテゴリ球周囲の内側リング半径 */
+export const SERVICE_RING_RADIUS = 2.2
+
+function ringForIndex(index: number, total: number): { index: number; total: number; radius: number } {
+  if (total <= 8) {
+    const radius = total >= 6 ? SERVICE_RING_RADIUS + 0.2 : SERVICE_RING_RADIUS
+    return { index, total, radius }
+  }
+
+  const innerCount = Math.ceil(total / 2)
+  const isOuter = index >= innerCount
+  return {
+    index: isOuter ? index - innerCount : index,
+    total: isOuter ? total - innerCount : innerCount,
+    radius: isOuter ? SERVICE_RING_RADIUS * 1.55 : SERVICE_RING_RADIUS,
+  }
+}
 
 /**
  * カテゴリ原点を中心に、サービスを楕円リング上へ配置する。
- * ServiceNode と ServiceEdges で同じ座標を共有する。
+ * 数が多いカテゴリは二重リングにして重なりを避ける。
  */
 export function getServiceLayoutPosition(
   index: number,
   total: number,
   origin: [number, number, number],
 ): [number, number, number] {
-  const angle = (index / Math.max(total, 1)) * Math.PI * 2 - Math.PI / 2
-  const x = origin[0] + Math.cos(angle) * SERVICE_RING_RADIUS
-  const y = origin[1] + Math.sin(angle) * SERVICE_RING_RADIUS * 0.65
+  const ring = ringForIndex(index, total)
+  const angle = (ring.index / Math.max(ring.total, 1)) * Math.PI * 2 - Math.PI / 2
+  const x = origin[0] + Math.cos(angle) * ring.radius
+  const y = origin[1] + Math.sin(angle) * ring.radius * 0.65
   const z = origin[2] + 0.4
   return [x, y, z]
 }

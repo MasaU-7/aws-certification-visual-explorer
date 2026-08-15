@@ -95,7 +95,7 @@ export function ServiceInspector() {
                       <RelIcon size={16} />
                     </span>
                   )}
-                  {rel}
+                  {getServiceById(rel)?.name ?? rel}
                 </button>
               </li>
             )

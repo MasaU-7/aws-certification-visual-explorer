@@ -10,6 +10,7 @@ export type ServiceCategory =
   | 'integration'
   | 'management'
   | 'cdn'
+  | 'analytics'
 
 export type VisualShape =
   | 'server'
