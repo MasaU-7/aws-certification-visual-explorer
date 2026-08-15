@@ -1,15 +1,32 @@
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, Stars } from '@react-three/drei'
-import { Suspense, useMemo } from 'react'
+import { Suspense, useLayoutEffect, useMemo } from 'react'
 import { categoryNodes } from '@/data/categories'
 import { getServicesForCertification } from '@/data/services'
 import { useExplorerStore } from '@/store/explorerStore'
 import { buildRelationshipGraph } from '@/scene/layout/relatedServices'
+import { VpcCityContent } from '@/scene/vpc/VpcCityContent'
 import { CategoryOrb } from './nodes/CategoryOrb'
 import { GhostServiceNode } from './nodes/GhostServiceNode'
 import { ServiceNode } from './nodes/ServiceNode'
 import { ServiceEdges } from './edges/ServiceEdges'
 import { WorldEdges } from './edges/WorldEdges'
+
+function SceneCamera() {
+  const sceneView = useExplorerStore((s) => s.sceneView)
+  const { camera } = useThree()
+
+  useLayoutEffect(() => {
+    if (sceneView === 'vpc-city') {
+      camera.position.set(0, 7.4, 11.2)
+    } else {
+      camera.position.set(0, 2, 12)
+    }
+    camera.updateProjectionMatrix()
+  }, [sceneView, camera])
+
+  return null
+}
 
 function WorldContent() {
   const certificationId = useExplorerStore((s) => s.certificationId)
@@ -115,16 +132,22 @@ function WorldContent() {
 }
 
 export function WorldScene() {
+  const sceneView = useExplorerStore((s) => s.sceneView)
+  const isCity = sceneView === 'vpc-city'
+
   return (
     <Canvas camera={{ position: [0, 2, 12], fov: 45 }} dpr={[1, 2]}>
       <Suspense fallback={null}>
-        <WorldContent />
+        <SceneCamera />
+        {isCity ? <VpcCityContent /> : <WorldContent />}
         <OrbitControls
           enablePan
           enableZoom
-          minDistance={5}
-          maxDistance={28}
-          maxPolarAngle={Math.PI * 0.85}
+          target={isCity ? [0, 0.3, 0.4] : [0, 0, 0]}
+          minDistance={isCity ? 6 : 5}
+          maxDistance={isCity ? 22 : 28}
+          minPolarAngle={isCity ? 0.35 : 0}
+          maxPolarAngle={isCity ? Math.PI * 0.48 : Math.PI * 0.85}
         />
       </Suspense>
     </Canvas>
