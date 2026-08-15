@@ -26,6 +26,29 @@ main
 3. PR は小さく、1 PR = 1 意図
 4. 秘密情報・個人データをコミットしない
 5. コミットメッセージは「なぜ」を短く（日本語可）
+6. **マージコミットを残す** — `develop` / `main` への取り込みは squash・rebase merge にしない
+
+## マージ方針
+
+ブランチ統合時は **Create a merge commit**（マージコミット）を使い、履歴を残す。
+
+| やること | 理由 |
+|----------|------|
+| `feature/*` → `develop` は merge commit | feature の開始・完了が履歴に残る |
+| `release/*` → `main` / `develop` も merge commit | リリース単位を追いやすい |
+| Squash merge は使わない | コミット粒度と「なぜ」が失われる |
+| Rebase merge は使わない | ブランチ境界が履歴から消える |
+
+GitHub PR マージ時: **Merge pull request**（Create a merge commit）を選ぶ。
+
+```text
+*   merge: feature/xxx into develop
+|\
+| * feat: ...
+| * fix: ...
+|/
+* previous develop
+```
 
 ## 初期セットアップ後の作業例
 
