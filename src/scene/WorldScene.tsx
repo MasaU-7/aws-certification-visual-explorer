@@ -20,7 +20,7 @@ function SceneCamera() {
     if (sceneView === 'vpc-city') {
       camera.position.set(0, 7.4, 11.2)
     } else {
-      camera.position.set(0, 2, 12)
+      camera.position.set(0, 2.4, 15)
     }
     camera.updateProjectionMatrix()
   }, [sceneView, camera])
@@ -124,7 +124,7 @@ function WorldContent() {
         rotation={[-Math.PI / 2, 0, 0]}
         onClick={() => selectCategory(null)}
       >
-        <circleGeometry args={[12, 64]} />
+        <circleGeometry args={[18, 64]} />
         <meshBasicMaterial color="#070b14" transparent opacity={0} />
       </mesh>
     </>
@@ -136,7 +136,7 @@ export function WorldScene() {
   const isCity = sceneView === 'vpc-city'
 
   return (
-    <Canvas camera={{ position: [0, 2, 12], fov: 45 }} dpr={[1, 2]}>
+    <Canvas camera={{ position: [0, 2.4, 15], fov: 45 }} dpr={[1, 2]}>
       <Suspense fallback={null}>
         <SceneCamera />
         {isCity ? <VpcCityContent /> : <WorldContent />}
@@ -145,7 +145,7 @@ export function WorldScene() {
           enableZoom
           target={isCity ? [0, 0.3, 0.4] : [0, 0, 0]}
           minDistance={isCity ? 6 : 5}
-          maxDistance={isCity ? 22 : 28}
+          maxDistance={isCity ? 22 : 36}
           minPolarAngle={isCity ? 0.35 : 0}
           maxPolarAngle={isCity ? Math.PI * 0.48 : Math.PI * 0.85}
         />
