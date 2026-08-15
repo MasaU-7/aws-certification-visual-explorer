@@ -28,6 +28,7 @@ alwaysApply: true
 - 日常開発は `develop` 起点の `feature/*`
 - `main` はデプロイ可能状態のみ
 - `develop` / `main` への取り込みは **マージコミットを残す**（squash / rebase merge しない）
+- **`develop` を `main` に直接マージしない** — `release/*` 経由のみ
 - 詳細は `docs/GIT_FLOW.md`
 
 ## MVP

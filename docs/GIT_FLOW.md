@@ -38,8 +38,21 @@ main
 | `release/*` → `main` / `develop` も merge commit | リリース単位を追いやすい |
 | Squash merge は使わない | コミット粒度と「なぜ」が失われる |
 | Rebase merge は使わない | ブランチ境界が履歴から消える |
+| **`develop` → `main` の PR は作らない** | 本番反映は必ず `release/*` 経由 |
 
 GitHub PR マージ時: **Merge pull request**（Create a merge commit）を選ぶ。
+
+`main` へ反映するとき:
+
+```bash
+git checkout develop
+git pull origin develop
+git checkout -b release/0.1.0
+# リリース向けの最終調整（バージョン表記など）
+git push -u origin release/0.1.0
+# PR: release/0.1.0 → main（merge commit）
+# 同じ release ブランチを develop にも merge してタグ・差分を揃える
+```
 
 ```text
 *   merge: feature/xxx into develop
