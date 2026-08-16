@@ -273,6 +273,14 @@ button:disabled {
   color: #e07ae8;
 }
 
+.city-sign--identity {
+  color: #e45a6c;
+}
+
+.city-sign--detect {
+  color: #e07a8a;
+}
+
 .city-legend {
   position: absolute;
   left: 1.25rem;
@@ -452,6 +460,24 @@ button:disabled {
 .loc-chip--l7,
 .loc-chip--lambda\@edge {
   border-color: rgba(167, 139, 250, 0.65);
+}
+
+.loc-chip--account,
+.loc-chip--multi-account,
+.loc-chip--sso,
+.loc-chip--directory,
+.loc-chip--cmk,
+.loc-chip--hsm,
+.loc-chip--rotation,
+.loc-chip--findings,
+.loc-chip--hub,
+.loc-chip--pii,
+.loc-chip--vuln,
+.loc-chip--org-scope,
+.loc-chip--audit,
+.loc-chip--compliance,
+.loc-chip--classify {
+  border-color: rgba(221, 52, 76, 0.55);
 }
 
 .inspector__icon {

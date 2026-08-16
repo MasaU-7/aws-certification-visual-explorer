@@ -34,6 +34,7 @@ export type SceneView =
   | 'cdn-city'
   | 'storage-city'
   | 'database-city'
+  | 'security-city'
 
 export type CityView = Exclude<SceneView, 'world'>
 
