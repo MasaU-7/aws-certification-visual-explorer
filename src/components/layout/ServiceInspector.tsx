@@ -155,7 +155,9 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
             ? ['region', 'COPY']
             : sceneView === 'security-city'
               ? ['region', 'classify']
-              : ['AWS', 'event']),
+              : sceneView === 'analytics-city'
+                ? ['region', 'lake']
+                : ['AWS', 'event']),
     )
   }
   if (occupant.serviceId === 'rds') chips.push('RDB', 'multi-AZ')
@@ -168,6 +170,9 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
   if (occupant.serviceId === 'keyspaces') chips.push('AWS', 'serverless', 'cassandra')
   if (occupant.serviceId === 'timestream') chips.push('AWS', 'serverless', 'timeseries')
   if (occupant.serviceId === 'kinesis') chips.push('AWS', 'stream')
+  if (occupant.id === 'emr' && !occupant.az) chips.push('AWS', 'cluster')
+  if (occupant.serviceId === 'emr' && occupant.az) chips.push('spark', 'in VPC')
+  if (occupant.serviceId === 'athena') chips.push('AWS', 'serverless', 'SQL')
   if (occupant.serviceId === 'quicksight') chips.push('AWS', 'BI')
   if (occupant.serviceId === 'ebs') chips.push('block', 'same-AZ')
   if (occupant.serviceId === 'efs') chips.push('NFS', 'multi-AZ')
