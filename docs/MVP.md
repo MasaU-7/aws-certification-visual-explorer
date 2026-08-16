@@ -51,7 +51,7 @@ SAA-C03 で構成の選択肢になるものをノードにする。リソース
 |-------|------|------|
 | 1 | AWS World + SAA フィルター | MVP |
 | 2 | サービス同士の関係可視化強化 | 次 |
-| 3 | VPC / SG 等の3D領域表現 | VPC City（AZ / Public / Private） |
+| 3 | VPC / SG 等の3D領域表現 | Networking City（AZ / Public / Private） |
 | 4 | 通信・イベントアニメーション | 次 |
 | 5 | Scenario Mode | 次 |
 | 6 | SAA Exam Guide 対応の明示 / 図集 | World 範囲を拡充。図集は次 |

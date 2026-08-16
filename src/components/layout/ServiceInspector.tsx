@@ -1,4 +1,4 @@
-import { getCityOccupant } from '@/data/vpc'
+import { getActiveOccupant, isCityView } from '@/data/cities'
 import { fixtureIcons, serviceIcons } from '@/data/icons'
 import { getServiceById } from '@/data/services'
 import { useExplorerStore } from '@/store/explorerStore'
@@ -14,10 +14,10 @@ export function ServiceInspector() {
   const selectService = useExplorerStore((s) => s.selectService)
   const selectOccupant = useExplorerStore((s) => s.selectOccupant)
 
-  const occupant = selectedOccupantId ? getCityOccupant(selectedOccupantId) : undefined
+  const occupant = selectedOccupantId ? getActiveOccupant(sceneView, selectedOccupantId) : undefined
   const service = selectedServiceId ? getServiceById(selectedServiceId) : undefined
 
-  if (sceneView === 'vpc-city' && selectedServiceId === 'vpc' && !occupant) return null
+  if (isCityView(sceneView) && selectedServiceId === 'vpc' && !occupant) return null
 
   if (!occupant && !service) return null
 
@@ -126,6 +126,15 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
   if (occupant.kind === 'internet') chips.push('outside')
   if (occupant.kind === 'igw') chips.push('AWS', 'edge')
   if (occupant.kind === 'onprem') chips.push('on-prem')
+  if (occupant.id === 'lambda') chips.push('AWS', 'managed', 'outside VPC')
+  if (occupant.id === 'lambda-vpc') chips.push('in VPC')
+  if (occupant.id === 'asg') chips.push('AWS', 'group')
+  if (occupant.id === 'cloudwatch') chips.push('AWS', 'metrics')
+  if (occupant.id === 'dynamodb') chips.push('AWS', 'managed')
+  if (occupant.id === 'batch' && !occupant.az) chips.push('AWS', 'scheduler')
+  if (occupant.serviceId === 'ecs' && occupant.az) chips.push('task')
+  if (occupant.serviceId === 's3' && !occupant.az) chips.push('AWS', 'event')
+  if (occupant.serviceId === 'sqs' && !occupant.az) chips.push('AWS', 'event')
   if (occupant.serviceId === 'route53') chips.push('outside', 'dns')
   if (occupant.serviceId === 'direct-connect') chips.push('DX location', 'dedicated')
   if (occupant.serviceId === 'site-to-site-vpn') chips.push('over Internet')

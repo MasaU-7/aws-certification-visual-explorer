@@ -1,6 +1,7 @@
 import { Html } from '@react-three/drei'
 import { fixtureIcons, serviceIcons } from '@/data/icons'
 import { getServiceById } from '@/data/services'
+import { getComputeOccupantPosition } from '@/scene/compute/computeLayout'
 import { getOccupantPosition, INTERNET_COLOR, ONPREM_COLOR } from '@/scene/vpc/cityLayout'
 import { useExplorerStore } from '@/store/explorerStore'
 import type { CityOccupant } from '@/types/aws'
@@ -12,11 +13,13 @@ interface CityOccupantNodeProps {
 export function CityOccupantNode({ occupant }: CityOccupantNodeProps) {
   const selectedOccupantId = useExplorerStore((s) => s.selectedOccupantId)
   const selectedServiceId = useExplorerStore((s) => s.selectedServiceId)
+  const sceneView = useExplorerStore((s) => s.sceneView)
   const selectOccupant = useExplorerStore((s) => s.selectOccupant)
   const isSelected =
     selectedOccupantId === occupant.id ||
     Boolean(occupant.serviceId && occupant.serviceId === selectedServiceId)
-  const [x, y, z] = getOccupantPosition(occupant)
+  const [x, y, z] =
+    sceneView === 'compute-city' ? getComputeOccupantPosition(occupant) : getOccupantPosition(occupant)
   const serviceColor = occupant.serviceId
     ? getServiceById(occupant.serviceId)?.visual.color
     : '#8C4FFF'

@@ -1,10 +1,12 @@
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, Stars } from '@react-three/drei'
 import { Suspense, useLayoutEffect, useMemo } from 'react'
+import { isCityView } from '@/data/cities'
 import { categoryNodes } from '@/data/categories'
 import { getServicesForCertification } from '@/data/services'
 import { useExplorerStore } from '@/store/explorerStore'
 import { buildRelationshipGraph } from '@/scene/layout/relatedServices'
+import { ComputeCityContent } from '@/scene/compute/ComputeCityContent'
 import { VpcCityContent } from '@/scene/vpc/VpcCityContent'
 import { CategoryOrb } from './nodes/CategoryOrb'
 import { GhostServiceNode } from './nodes/GhostServiceNode'
@@ -17,8 +19,10 @@ function SceneCamera() {
   const { camera } = useThree()
 
   useLayoutEffect(() => {
-    if (sceneView === 'vpc-city') {
+    if (sceneView === 'network-city') {
       camera.position.set(-2.6, 9.4, 14.2)
+    } else if (sceneView === 'compute-city') {
+      camera.position.set(0.55, 9.4, 14.2)
     } else {
       camera.position.set(0, 2.4, 15)
     }
@@ -133,17 +137,29 @@ function WorldContent() {
 
 export function WorldScene() {
   const sceneView = useExplorerStore((s) => s.sceneView)
-  const isCity = sceneView === 'vpc-city'
+  const isCity = isCityView(sceneView)
+  const isNetwork = sceneView === 'network-city'
+  const orbitTarget: [number, number, number] = isNetwork
+    ? [-2.6, 0.28, 0.45]
+    : sceneView === 'compute-city'
+      ? [0.55, 0.28, 0.2]
+      : [0, 0, 0]
 
   return (
     <Canvas camera={{ position: [0, 2.4, 15], fov: 45 }} dpr={[1, 2]}>
       <Suspense fallback={null}>
         <SceneCamera />
-        {isCity ? <VpcCityContent /> : <WorldContent />}
+        {sceneView === 'network-city' ? (
+          <VpcCityContent />
+        ) : sceneView === 'compute-city' ? (
+          <ComputeCityContent />
+        ) : (
+          <WorldContent />
+        )}
         <OrbitControls
           enablePan
           enableZoom
-          target={isCity ? [-2.6, 0.28, 0.45] : [0, 0, 0]}
+          target={orbitTarget}
           minDistance={isCity ? 7 : 5}
           maxDistance={isCity ? 28 : 36}
           minPolarAngle={isCity ? 0.32 : 0}
