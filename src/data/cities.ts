@@ -20,6 +20,13 @@ import {
   isDatabaseCityService,
 } from '@/data/database'
 import {
+  getIntegrationOccupant,
+  getIntegrationPrimaryOccupantId,
+  isIntegrationCityEntry,
+  isIntegrationCityService,
+  integrationCity,
+} from '@/data/integration'
+import {
   getSecurityOccupant,
   getSecurityPrimaryOccupantId,
   isSecurityCityEntry,
@@ -49,6 +56,7 @@ const CITY_BY_VIEW: Record<CityView, VpcCityDefinition> = {
   'storage-city': storageCity,
   'database-city': databaseCity,
   'security-city': securityCity,
+  'integration-city': integrationCity,
 }
 
 const CATEGORY_BY_CITY: Record<CityView, ServiceCategory> = {
@@ -58,6 +66,7 @@ const CATEGORY_BY_CITY: Record<CityView, ServiceCategory> = {
   'storage-city': 'storage',
   'database-city': 'database',
   'security-city': 'security',
+  'integration-city': 'integration',
 }
 
 const DEFAULT_SERVICE_BY_CITY: Record<CityView, string> = {
@@ -67,6 +76,7 @@ const DEFAULT_SERVICE_BY_CITY: Record<CityView, string> = {
   'storage-city': 's3',
   'database-city': 'rds',
   'security-city': 'iam',
+  'integration-city': 'sns',
 }
 
 export function isCityView(view: SceneView): view is CityView {
@@ -76,7 +86,8 @@ export function isCityView(view: SceneView): view is CityView {
     view === 'cdn-city' ||
     view === 'storage-city' ||
     view === 'database-city' ||
-    view === 'security-city'
+    view === 'security-city' ||
+    view === 'integration-city'
   )
 }
 
@@ -95,6 +106,7 @@ export function getEntryCity(serviceId: string): CityView | null {
   if (isStorageCityEntry(serviceId)) return 'storage-city'
   if (isDatabaseCityEntry(serviceId)) return 'database-city'
   if (isSecurityCityEntry(serviceId)) return 'security-city'
+  if (isIntegrationCityEntry(serviceId)) return 'integration-city'
   return null
 }
 
@@ -104,6 +116,7 @@ export function isServiceInCity(view: CityView, serviceId: string) {
   if (view === 'storage-city') return isStorageCityService(serviceId)
   if (view === 'database-city') return isDatabaseCityService(serviceId)
   if (view === 'security-city') return isSecurityCityService(serviceId)
+  if (view === 'integration-city') return isIntegrationCityService(serviceId)
   return isVpcCityService(serviceId)
 }
 
@@ -117,6 +130,7 @@ export function cityContainingService(serviceId: string, current: CityView): Cit
   if (isStorageCityService(serviceId)) return 'storage-city'
   if (isDatabaseCityService(serviceId)) return 'database-city'
   if (isSecurityCityService(serviceId)) return 'security-city'
+  if (isIntegrationCityService(serviceId)) return 'integration-city'
   return null
 }
 
@@ -127,6 +141,7 @@ export function getActiveOccupant(view: SceneView, id: string) {
   if (view === 'storage-city') return getStorageOccupant(id)
   if (view === 'database-city') return getDatabaseOccupant(id)
   if (view === 'security-city') return getSecurityOccupant(id)
+  if (view === 'integration-city') return getIntegrationOccupant(id)
   return undefined
 }
 
@@ -136,6 +151,7 @@ export function getActivePrimaryOccupantId(view: CityView, serviceId: string | n
   if (view === 'storage-city') return getStoragePrimaryOccupantId(serviceId)
   if (view === 'database-city') return getDatabasePrimaryOccupantId(serviceId)
   if (view === 'security-city') return getSecurityPrimaryOccupantId(serviceId)
+  if (view === 'integration-city') return getIntegrationPrimaryOccupantId(serviceId)
   return getVpcPrimaryOccupantId(serviceId)
 }
 
