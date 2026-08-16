@@ -1,8 +1,9 @@
 import type { AvailabilityZoneId, CityOccupant, SubnetTier } from '@/types/aws'
 
 const AZ_X: Record<AvailabilityZoneId, number> = {
-  'az-a': -2.35,
-  'az-b': 2.35,
+  'az-a': 0,
+  'az-b': 0,
+  'az-c': 0,
 }
 
 const TIER_Z: Record<SubnetTier, number> = {
@@ -12,10 +13,10 @@ const TIER_Z: Record<SubnetTier, number> = {
 
 export const ANALYTICS_SUBNET_SIZE: [number, number, number] = [4.35, 0.06, 2.55]
 export const ANALYTICS_AZ_SIZE: [number, number, number] = [4.55, 1.55, 5.55]
-export const ANALYTICS_VPC_SIZE: [number, number, number] = [9.5, 1.75, 6.05]
-export const ANALYTICS_AWS_SIZE: [number, number, number] = [17.4, 2.08, 7.85]
-export const ANALYTICS_AWS_CENTER: [number, number, number] = [1.75, 0.74, 0.22]
-export const LAKE_CENTER: [number, number, number] = [6.45, 0.72, 0.45]
+export const ANALYTICS_VPC_SIZE: [number, number, number] = [5.05, 1.75, 6.05]
+export const ANALYTICS_AWS_SIZE: [number, number, number] = [13.2, 2.08, 7.85]
+export const ANALYTICS_AWS_CENTER: [number, number, number] = [2.55, 0.74, 0.22]
+export const LAKE_CENTER: [number, number, number] = [5.55, 0.72, 0.45]
 export const LAKE_SIZE: [number, number, number] = [4.55, 1.35, 5.95]
 
 export function getAnalyticsAzCenter(az: AvailabilityZoneId): [number, number, number] {
@@ -40,13 +41,13 @@ function getPrivateSlot(
 const FIXED_POSITIONS: Record<string, [number, number, number]> = {
   internet: [0, 1.85, 5.65],
   igw: [0, 0.55, 3.55],
-  kinesis: [5.55, 1.15, 2.65],
-  lambda: [7.35, 1.15, 2.65],
-  s3: [6.45, 1.15, 1.05],
-  athena: [5.55, 1.15, -0.45],
-  quicksight: [7.35, 1.15, -0.45],
-  timestream: [5.55, 1.15, -1.95],
-  emr: [7.35, 1.15, -1.95],
+  kinesis: [4.65, 1.15, 2.65],
+  lambda: [6.45, 1.15, 2.65],
+  s3: [5.55, 1.15, 1.05],
+  athena: [4.65, 1.15, -0.45],
+  quicksight: [6.45, 1.15, -0.45],
+  timestream: [4.65, 1.15, -1.95],
+  emr: [6.45, 1.15, -1.95],
 }
 
 export function getAnalyticsOccupantPosition(occupant: CityOccupant): [number, number, number] {

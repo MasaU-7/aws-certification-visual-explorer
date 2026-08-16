@@ -13,13 +13,13 @@ const MANAGEMENT_CITY_SERVICES = new Set([
 
 /**
  * SAA の Management を 1 画面に置く。
- * CloudWatch / Trail / Config / CFN / SSM / Cost / Budgets は VPC 外（Ops）。
+ * Ops はリージョンサービス。観測対象の VPC は 1 AZ で足りる。
  * CloudWatch はメトリクスとアラーム。Trail / Config は S3 へ残す。
- * SSM Session は Internet→SSM→EC2（bastion なし）。Budgets は SNS。
+ * SSM Session は Internet→SSM→EC2。Budgets は SNS。
  */
 export const managementCity: VpcCityDefinition = {
   id: 'saa-management-city',
-  azs: ['az-a', 'az-b'],
+  azs: ['az-a'],
   occupants: [
     { id: 'internet', kind: 'internet', label: 'Internet', az: null, tier: null },
     { id: 'igw', kind: 'igw', label: 'IGW', az: null, tier: null },
@@ -34,27 +34,18 @@ export const managementCity: VpcCityDefinition = {
     { id: 'cost-explorer', kind: 'service', label: 'Cost Explorer', az: null, tier: null, serviceId: 'cost-explorer' },
     { id: 'budgets', kind: 'service', label: 'Budgets', az: null, tier: null, serviceId: 'budgets' },
     { id: 'alb-a', kind: 'service', label: 'ALB', az: 'az-a', tier: 'public', serviceId: 'elb' },
-    { id: 'alb-b', kind: 'service', label: 'ALB', az: 'az-b', tier: 'public', serviceId: 'elb' },
     { id: 'nat-a', kind: 'nat', label: 'NAT', az: 'az-a', tier: 'public' },
-    { id: 'nat-b', kind: 'nat', label: 'NAT', az: 'az-b', tier: 'public' },
     { id: 'ec2-a', kind: 'service', label: 'EC2', az: 'az-a', tier: 'private', serviceId: 'ec2' },
-    { id: 'ec2-b', kind: 'service', label: 'EC2', az: 'az-b', tier: 'private', serviceId: 'ec2' },
   ],
   flows: [
     L('in-net', 'internet', 'igw', 'ingress'),
     L('in-a', 'igw', 'alb-a', 'ingress'),
-    L('in-b', 'igw', 'alb-b', 'ingress'),
     L('app-a', 'alb-a', 'ec2-a', 'app'),
-    L('app-b', 'alb-b', 'ec2-b', 'app'),
     L('cw-alb-a', 'alb-a', 'cloudwatch', 'event'),
-    L('cw-alb-b', 'alb-b', 'cloudwatch', 'event'),
     L('cw-ec2-a', 'ec2-a', 'cloudwatch', 'event'),
-    L('cw-ec2-b', 'ec2-b', 'cloudwatch', 'event'),
     L('cw-asg', 'cloudwatch', 'asg', 'scale', 'access'),
     L('scale-alb-a', 'asg', 'alb-a', 'scale', 'attach', 'none'),
-    L('scale-alb-b', 'asg', 'alb-b', 'scale', 'attach', 'none'),
     L('scale-a', 'asg', 'ec2-a', 'scale', 'attach', 'none'),
-    L('scale-b', 'asg', 'ec2-b', 'scale', 'attach', 'none'),
     L('cw-sns', 'cloudwatch', 'sns', 'event'),
     L('cw-trail', 'cloudtrail', 'cloudwatch', 'event'),
     L('trail-s3', 'cloudtrail', 's3', 'data', 'access'),
@@ -63,19 +54,14 @@ export const managementCity: VpcCityDefinition = {
     L('cfn-config', 'cfn', 'config', 'app', 'associate', 'none'),
     L('cfn-asg', 'cfn', 'asg', 'scale'),
     L('cfn-ec2-a', 'cfn', 'ec2-a', 'scale'),
-    L('cfn-ec2-b', 'cfn', 'ec2-b', 'scale'),
     L('ssm-in', 'internet', 'ssm', 'ingress', 'path', 'fwd', 'internet'),
     L('ssm-ec2-a', 'ssm', 'ec2-a', 'app', 'access'),
-    L('ssm-ec2-b', 'ssm', 'ec2-b', 'app', 'access'),
     L('param-a', 'ec2-a', 'ssm', 'data', 'access'),
-    L('param-b', 'ec2-b', 'ssm', 'data', 'access'),
     L('ssm-cw', 'ssm', 'cloudwatch', 'event'),
     L('ce-budgets', 'cost-explorer', 'budgets', 'app', 'associate', 'none'),
     L('budgets-sns', 'budgets', 'sns', 'event'),
     L('out-a', 'ec2-a', 'nat-a', 'egress'),
-    L('out-b', 'ec2-b', 'nat-b', 'egress'),
     L('out-igw-a', 'nat-a', 'igw', 'egress'),
-    L('out-igw-b', 'nat-b', 'igw', 'egress'),
   ],
 }
 

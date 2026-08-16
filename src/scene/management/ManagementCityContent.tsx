@@ -7,22 +7,18 @@ import { useExplorerStore } from '@/store/explorerStore'
 
 const CW_CHAIN = new Set([
   'cw-alb-a',
-  'cw-alb-b',
   'cw-ec2-a',
-  'cw-ec2-b',
   'cw-asg',
   'cw-sns',
   'cw-trail',
   'scale-alb-a',
-  'scale-alb-b',
   'scale-a',
-  'scale-b',
   'ssm-cw',
 ])
 const TRAIL_CHAIN = new Set(['trail-s3', 'cw-trail', 'trail-config'])
 const CONFIG_CHAIN = new Set(['config-s3', 'trail-config', 'cfn-config'])
-const CFN_CHAIN = new Set(['cfn-ec2-a', 'cfn-ec2-b', 'cfn-asg', 'cfn-config'])
-const SSM_CHAIN = new Set(['ssm-in', 'ssm-ec2-a', 'ssm-ec2-b', 'param-a', 'param-b', 'ssm-cw'])
+const CFN_CHAIN = new Set(['cfn-ec2-a', 'cfn-asg', 'cfn-config'])
+const SSM_CHAIN = new Set(['ssm-in', 'ssm-ec2-a', 'param-a', 'ssm-cw'])
 const COST_CHAIN = new Set(['ce-budgets', 'budgets-sns'])
 
 export function ManagementCityContent() {

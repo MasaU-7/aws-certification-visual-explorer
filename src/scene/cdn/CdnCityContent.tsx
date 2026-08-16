@@ -5,17 +5,8 @@ import { CityEdges } from '@/scene/vpc/CityEdges'
 import { CityOccupantNode } from '@/scene/vpc/CityOccupantNode'
 import { useExplorerStore } from '@/store/explorerStore'
 
-const CF_ORIGIN_FLOWS = new Set([
-  'cf-lambda-edge',
-  'cf-s3',
-  'cf-lambda',
-  'cf-igw',
-  'igw-a',
-  'igw-b',
-  'app-a',
-  'app-b',
-])
-const GA_ENDPOINT_FLOWS = new Set(['ga-nlb-a', 'ga-nlb-b', 'nlb-app-a', 'nlb-app-b'])
+const CF_ORIGIN_FLOWS = new Set(['cf-lambda-edge', 'cf-s3', 'cf-lambda', 'cf-igw', 'igw-a', 'app-a'])
+const GA_ENDPOINT_FLOWS = new Set(['ga-nlb-a', 'ga-nlb-r2', 'nlb-app-a', 'nlb-app-r2'])
 const LAMBDA_FLOWS = new Set(['cf-lambda-edge', 'cf-lambda'])
 
 export function CdnCityContent() {

@@ -5,18 +5,9 @@ import { CityEdges } from '@/scene/vpc/CityEdges'
 import { CityOccupantNode } from '@/scene/vpc/CityOccupantNode'
 import { useExplorerStore } from '@/store/explorerStore'
 
-const FANOUT_CHAIN = new Set(['pub-a', 'pub-b', 'fan-sqs', 'fan-lambda', 'fan-ses', 'mail'])
-const QUEUE_CHAIN = new Set(['fan-sqs', 'poll-lambda', 'poll-ecs-a', 'poll-ecs-b'])
-const SFN_CHAIN = new Set([
-  'sfn-lambda',
-  'sfn-sqs',
-  'sfn-sns',
-  'sfn-ecs-a',
-  'sfn-ecs-b',
-  'sfn-batch',
-  'batch-launch-a',
-  'batch-launch-b',
-])
+const FANOUT_CHAIN = new Set(['pub-a', 'fan-sqs', 'fan-lambda', 'fan-ses', 'mail'])
+const QUEUE_CHAIN = new Set(['fan-sqs', 'poll-lambda', 'poll-ecs-a'])
+const SFN_CHAIN = new Set(['sfn-lambda', 'sfn-sqs', 'sfn-sns', 'sfn-ecs-a', 'sfn-batch', 'batch-launch-a'])
 const EMAIL_CHAIN = new Set(['fan-ses', 'mail'])
 
 export function IntegrationCityContent() {

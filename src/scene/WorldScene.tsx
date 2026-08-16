@@ -29,13 +29,13 @@ function SceneCamera() {
     if (sceneView === 'network-city') {
       camera.position.set(-2.6, 9.4, 14.2)
     } else if (sceneView === 'compute-city') {
-      camera.position.set(0.55, 9.4, 14.2)
+      camera.position.set(-1.55, 9.4, 14.2)
     } else if (sceneView === 'cdn-city') {
-      camera.position.set(0.35, 9.6, 14.6)
+      camera.position.set(3.55, 10.4, 16.4)
     } else if (sceneView === 'storage-city') {
-      camera.position.set(-1.55, 9.6, 14.6)
+      camera.position.set(-3.15, 9.6, 14.6)
     } else if (sceneView === 'database-city') {
-      camera.position.set(0.65, 10.2, 15.8)
+      camera.position.set(-1.55, 11.2, 17.4)
     } else if (sceneView === 'security-city') {
       camera.position.set(-0.15, 10.6, 16.4)
     } else if (sceneView === 'integration-city') {

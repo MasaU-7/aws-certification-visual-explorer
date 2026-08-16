@@ -21,13 +21,13 @@ const SECURITY_CITY_SERVICES = new Set([
 
 /**
  * SAA の Security を 1 画面に置く。
- * Identity（Organizations / IAM / Identity Center / FMS / KMS / Secrets）はアカウント・リージョン。
- * Directory Service / CloudHSM は VPC 内（Private、Multi-AZ）。
- * WAF / Shield / ACM は Edge。検出は Security Hub に集約。
+ * 主サービスはアカウント / リージョン / Edge。AZ 横断は本筋ではないので VPC は 1 AZ。
+ * Identity は Organizations / IAM / Identity Center / FMS / KMS / Secrets。
+ * Directory / CloudHSM は VPC 内。検出は Security Hub に集約。
  */
 export const securityCity: VpcCityDefinition = {
   id: 'saa-security-city',
-  azs: ['az-a', 'az-b'],
+  azs: ['az-a'],
   occupants: [
     { id: 'internet', kind: 'internet', label: 'Internet', az: null, tier: null },
     { id: 'waf', kind: 'service', label: 'WAF', az: null, tier: null, serviceId: 'waf' },
@@ -49,17 +49,11 @@ export const securityCity: VpcCityDefinition = {
     { id: 'cloudtrail', kind: 'service', label: 'CloudTrail', az: null, tier: null, serviceId: 'cloudtrail' },
     { id: 's3', kind: 'service', label: 'S3', az: null, tier: null, serviceId: 's3' },
     { id: 'alb-a', kind: 'service', label: 'ALB', az: 'az-a', tier: 'public', serviceId: 'elb' },
-    { id: 'alb-b', kind: 'service', label: 'ALB', az: 'az-b', tier: 'public', serviceId: 'elb' },
     { id: 'nat-a', kind: 'nat', label: 'NAT', az: 'az-a', tier: 'public' },
-    { id: 'nat-b', kind: 'nat', label: 'NAT', az: 'az-b', tier: 'public' },
     { id: 'ec2-a', kind: 'service', label: 'EC2', az: 'az-a', tier: 'private', serviceId: 'ec2' },
-    { id: 'ec2-b', kind: 'service', label: 'EC2', az: 'az-b', tier: 'private', serviceId: 'ec2' },
     { id: 'hsm-a', kind: 'service', label: 'CloudHSM', az: 'az-a', tier: 'private', serviceId: 'cloudhsm' },
-    { id: 'hsm-b', kind: 'service', label: 'CloudHSM', az: 'az-b', tier: 'private', serviceId: 'cloudhsm' },
     { id: 'ds-a', kind: 'service', label: 'Directory', az: 'az-a', tier: 'private', serviceId: 'directory-service' },
-    { id: 'ds-b', kind: 'service', label: 'Directory', az: 'az-b', tier: 'private', serviceId: 'directory-service' },
     { id: 'rds-a', kind: 'service', label: 'RDS', az: 'az-a', tier: 'private', serviceId: 'rds' },
-    { id: 'rds-b', kind: 'service', label: 'RDS', az: 'az-b', tier: 'private', serviceId: 'rds' },
   ],
   flows: [
     L('in-cf', 'internet', 'cloudfront', 'ingress'),
@@ -68,39 +62,26 @@ export const securityCity: VpcCityDefinition = {
     L('acm-cf', 'acm', 'cloudfront', 'app', 'associate', 'none'),
     L('cf-igw', 'cloudfront', 'igw', 'app'),
     L('in-a', 'igw', 'alb-a', 'ingress'),
-    L('in-b', 'igw', 'alb-b', 'ingress'),
     L('waf-alb-a', 'waf', 'alb-a', 'app', 'associate', 'none'),
-    L('waf-alb-b', 'waf', 'alb-b', 'app', 'associate', 'none'),
     L('acm-alb-a', 'acm', 'alb-a', 'app', 'associate', 'none'),
-    L('acm-alb-b', 'acm', 'alb-b', 'app', 'associate', 'none'),
     L('app-a', 'alb-a', 'ec2-a', 'app'),
-    L('app-b', 'alb-b', 'ec2-b', 'app'),
     L('out-a', 'ec2-a', 'nat-a', 'egress'),
-    L('out-b', 'ec2-b', 'nat-b', 'egress'),
     L('out-igw-a', 'nat-a', 'igw', 'egress'),
-    L('out-igw-b', 'nat-b', 'igw', 'egress'),
     L('org-iam', 'organizations', 'iam', 'app', 'associate', 'none'),
     L('org-sso', 'organizations', 'identity-center', 'app', 'associate', 'none'),
     L('org-fms', 'organizations', 'fms', 'app', 'associate', 'none'),
     L('sso-iam', 'identity-center', 'iam', 'app', 'associate', 'none'),
     L('sso-ds-a', 'identity-center', 'ds-a', 'hybrid', 'access'),
-    L('sso-ds-b', 'identity-center', 'ds-b', 'hybrid', 'access'),
-    L('ds-ha', 'ds-a', 'ds-b', 'data', 'path', 'both'),
     L('iam-kms', 'iam', 'kms', 'app', 'access'),
     L('iam-secrets', 'iam', 'secrets', 'app', 'access'),
     L('kms-hsm-a', 'kms', 'hsm-a', 'data', 'associate', 'none'),
-    L('kms-hsm-b', 'kms', 'hsm-b', 'data', 'associate', 'none'),
-    L('hsm-ha', 'hsm-a', 'hsm-b', 'data', 'path', 'both'),
     L('secrets-kms', 'secrets', 'kms', 'data', 'access'),
     L('secrets-rds-a', 'secrets', 'rds-a', 'data', 'access'),
-    L('secrets-rds-b', 'secrets', 'rds-b', 'data', 'access'),
-    L('rds-ha', 'rds-a', 'rds-b', 'data', 'path', 'both'),
     L('fms-waf', 'fms', 'waf', 'app', 'associate', 'none'),
     L('fms-shield', 'fms', 'shield', 'app', 'associate', 'none'),
     L('trail-gd', 'cloudtrail', 'guardduty', 'event'),
     L('s3-macie', 's3', 'macie', 'data', 'access'),
     L('insp-ec2-a', 'inspector', 'ec2-a', 'data', 'access'),
-    L('insp-ec2-b', 'inspector', 'ec2-b', 'data', 'access'),
     L('gd-hub', 'guardduty', 'security-hub', 'event'),
     L('insp-hub', 'inspector', 'security-hub', 'event'),
     L('macie-hub', 'macie', 'security-hub', 'event'),

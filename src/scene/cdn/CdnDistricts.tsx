@@ -1,12 +1,15 @@
 import { Edges, Html } from '@react-three/drei'
+import { cdnCity } from '@/data/cdn'
 import {
   CDN_AZ_SIZE,
   CDN_EDGE_CENTER,
   CDN_EDGE_SIZE,
   CDN_ORIGIN_CENTER,
   CDN_ORIGIN_SIZE,
-  CDN_REGION_CENTER,
-  CDN_REGION_SIZE,
+  CDN_REGION_A_CENTER,
+  CDN_REGION_A_SIZE,
+  CDN_REGION_B_CENTER,
+  CDN_REGION_B_SIZE,
   CDN_SUBNET_SIZE,
   CDN_VPC_SIZE,
   getCdnAzCenter,
@@ -19,7 +22,7 @@ import {
   PUBLIC_COLOR,
   VPC_COLOR,
 } from '@/scene/vpc/cityLayout'
-import type { AvailabilityZoneId, SubnetTier } from '@/types/aws'
+import { AZ_LABEL, type AvailabilityZoneId, type SubnetTier } from '@/types/aws'
 
 const EDGE_COLOR = '#A78BFA'
 
@@ -56,7 +59,7 @@ function AzDistrict({ az }: { az: AvailabilityZoneId }) {
         <Edges color={AZ_COLOR} threshold={15} />
       </mesh>
       <Html position={[0, CDN_AZ_SIZE[1] / 2 + 0.15, 0]} center distanceFactor={12} style={{ pointerEvents: 'none' }}>
-        <div className="city-sign city-sign--az">{az === 'az-a' ? 'AZ-a' : 'AZ-b'}</div>
+        <div className="city-sign city-sign--az">{AZ_LABEL[az]}</div>
       </Html>
     </group>
   )
@@ -79,18 +82,18 @@ export function CdnDistricts() {
         <div className="city-sign city-sign--edge">Edge</div>
       </Html>
 
-      <mesh position={CDN_REGION_CENTER}>
-        <boxGeometry args={CDN_REGION_SIZE} />
+      <mesh position={CDN_REGION_A_CENTER}>
+        <boxGeometry args={CDN_REGION_A_SIZE} />
         <meshStandardMaterial color={AWS_CLOUD_COLOR} transparent opacity={0.035} depthWrite={false} />
         <Edges color={AWS_CLOUD_COLOR} threshold={15} />
       </mesh>
       <Html
-        position={[CDN_REGION_CENTER[0], 2.02, CDN_REGION_CENTER[2] - 2.85]}
+        position={[CDN_REGION_A_CENTER[0], 2.02, CDN_REGION_A_CENTER[2] - 2.85]}
         center
         distanceFactor={16}
         style={{ pointerEvents: 'none' }}
       >
-        <div className="city-sign city-sign--aws">Region</div>
+        <div className="city-sign city-sign--aws">Region A</div>
       </Html>
 
       <mesh position={[0, 0.62, -0.92]}>
@@ -108,12 +111,15 @@ export function CdnDistricts() {
         <div className="city-sign city-sign--private">Private</div>
       </Html>
 
-      <AzDistrict az="az-a" />
-      <AzDistrict az="az-b" />
-      <SubnetSlab az="az-a" tier="public" />
-      <SubnetSlab az="az-b" tier="public" />
-      <SubnetSlab az="az-a" tier="private" />
-      <SubnetSlab az="az-b" tier="private" />
+      {cdnCity.azs.map((az) => (
+        <AzDistrict key={az} az={az} />
+      ))}
+      {cdnCity.azs.map((az) => (
+        <SubnetSlab key={`${az}-public`} az={az} tier="public" />
+      ))}
+      {cdnCity.azs.map((az) => (
+        <SubnetSlab key={`${az}-private`} az={az} tier="private" />
+      ))}
 
       <mesh position={CDN_ORIGIN_CENTER}>
         <boxGeometry args={CDN_ORIGIN_SIZE} />
@@ -127,6 +133,20 @@ export function CdnDistricts() {
         style={{ pointerEvents: 'none' }}
       >
         <div className="city-sign city-sign--origin">Origin</div>
+      </Html>
+
+      <mesh position={CDN_REGION_B_CENTER}>
+        <boxGeometry args={CDN_REGION_B_SIZE} />
+        <meshStandardMaterial color={AWS_CLOUD_COLOR} transparent opacity={0.05} depthWrite={false} />
+        <Edges color={AWS_CLOUD_COLOR} threshold={15} />
+      </mesh>
+      <Html
+        position={[CDN_REGION_B_CENTER[0], 1.72, CDN_REGION_B_CENTER[2] - 1.95]}
+        center
+        distanceFactor={14}
+        style={{ pointerEvents: 'none' }}
+      >
+        <div className="city-sign city-sign--aws">Region B</div>
       </Html>
     </group>
   )

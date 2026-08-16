@@ -41,7 +41,13 @@ export type SceneView =
 
 export type CityView = Exclude<SceneView, 'world'>
 
-export type AvailabilityZoneId = 'az-a' | 'az-b'
+export type AvailabilityZoneId = 'az-a' | 'az-b' | 'az-c'
+
+export const AZ_LABEL: Record<AvailabilityZoneId, string> = {
+  'az-a': 'AZ-a',
+  'az-b': 'AZ-b',
+  'az-c': 'AZ-c',
+}
 
 export type SubnetTier = 'public' | 'private'
 
