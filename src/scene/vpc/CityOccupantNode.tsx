@@ -4,6 +4,7 @@ import { getServiceById } from '@/data/services'
 import { getCdnOccupantPosition } from '@/scene/cdn/cdnLayout'
 import { getComputeOccupantPosition } from '@/scene/compute/computeLayout'
 import { getDatabaseOccupantPosition } from '@/scene/database/databaseLayout'
+import { getAnalyticsOccupantPosition } from '@/scene/analytics/analyticsLayout'
 import { getIntegrationOccupantPosition } from '@/scene/integration/integrationLayout'
 import { getSecurityOccupantPosition } from '@/scene/security/securityLayout'
 import { getStorageOccupantPosition } from '@/scene/storage/storageLayout'
@@ -36,7 +37,9 @@ export function CityOccupantNode({ occupant }: CityOccupantNodeProps) {
               ? getSecurityOccupantPosition(occupant)
               : sceneView === 'integration-city'
                 ? getIntegrationOccupantPosition(occupant)
-                : getOccupantPosition(occupant)
+                : sceneView === 'analytics-city'
+                  ? getAnalyticsOccupantPosition(occupant)
+                  : getOccupantPosition(occupant)
   const serviceColor = occupant.serviceId
     ? getServiceById(occupant.serviceId)?.visual.color
     : '#8C4FFF'
