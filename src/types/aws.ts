@@ -33,9 +33,9 @@ export type AvailabilityZoneId = 'az-a' | 'az-b'
 
 export type SubnetTier = 'public' | 'private'
 
-export type CityOccupantKind = 'internet' | 'igw' | 'nat' | 'service'
+export type CityOccupantKind = 'internet' | 'igw' | 'nat' | 'service' | 'onprem'
 
-export type CityFlowRole = 'ingress' | 'app' | 'data' | 'egress'
+export type CityFlowRole = 'ingress' | 'app' | 'data' | 'egress' | 'hybrid'
 
 export interface CityOccupant {
   id: string

@@ -18,7 +18,7 @@ function SceneCamera() {
 
   useLayoutEffect(() => {
     if (sceneView === 'vpc-city') {
-      camera.position.set(0, 7.4, 11.2)
+      camera.position.set(-2.6, 9.4, 14.2)
     } else {
       camera.position.set(0, 2.4, 15)
     }
@@ -143,10 +143,10 @@ export function WorldScene() {
         <OrbitControls
           enablePan
           enableZoom
-          target={isCity ? [0, 0.3, 0.4] : [0, 0, 0]}
-          minDistance={isCity ? 6 : 5}
-          maxDistance={isCity ? 22 : 36}
-          minPolarAngle={isCity ? 0.35 : 0}
+          target={isCity ? [-2.6, 0.28, 0.45] : [0, 0, 0]}
+          minDistance={isCity ? 7 : 5}
+          maxDistance={isCity ? 28 : 36}
+          minPolarAngle={isCity ? 0.32 : 0}
           maxPolarAngle={isCity ? Math.PI * 0.48 : Math.PI * 0.85}
         />
       </Suspense>

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { getCityOccupant, isVpcCityService } from '@/data/vpc'
+import { getServiceById } from '@/data/services'
+import { getCityOccupant, getPrimaryOccupantId, isNetworkCityEntry, isVpcCityService } from '@/data/vpc'
 import type { AppMode, CertificationId, SceneView } from '@/types/aws'
 
 interface ExplorerState {
@@ -16,7 +17,7 @@ interface ExplorerState {
   selectService: (id: string | null) => void
   clickService: (id: string) => void
   selectOccupant: (id: string | null) => void
-  enterVpcCity: () => void
+  enterVpcCity: (serviceId?: string) => void
   exitVpcCity: () => void
   setZoomLevel: (level: number) => void
 }
@@ -47,7 +48,7 @@ export const useExplorerStore = create<ExplorerState>((set) => ({
   selectService: (id) =>
     set((state) => ({
       selectedServiceId: id,
-      selectedOccupantId: null,
+      selectedOccupantId: state.sceneView === 'vpc-city' ? getPrimaryOccupantId(id) : null,
       sceneView:
         id && state.sceneView === 'vpc-city' && !isVpcCityService(id)
           ? 'world'
@@ -56,12 +57,12 @@ export const useExplorerStore = create<ExplorerState>((set) => ({
   clickService: (id) =>
     set((state) => {
       if (state.selectedServiceId === id) {
-        if (id === 'vpc' && state.sceneView === 'world') {
+        if (isNetworkCityEntry(id) && state.sceneView === 'world') {
           return {
             sceneView: 'vpc-city' as const,
             selectedCategoryId: 'network',
-            selectedServiceId: 'vpc',
-            selectedOccupantId: null,
+            selectedServiceId: id,
+            selectedOccupantId: getPrimaryOccupantId(id),
           }
         }
         return {
@@ -90,19 +91,22 @@ export const useExplorerStore = create<ExplorerState>((set) => ({
       selectedServiceId: occupant?.serviceId ?? null,
     })
   },
-  enterVpcCity: () =>
+  enterVpcCity: (serviceId = 'vpc') =>
     set({
       sceneView: 'vpc-city',
       selectedCategoryId: 'network',
-      selectedServiceId: 'vpc',
-      selectedOccupantId: null,
+      selectedServiceId: serviceId,
+      selectedOccupantId: getPrimaryOccupantId(serviceId),
     }),
   exitVpcCity: () =>
-    set({
-      sceneView: 'world',
-      selectedOccupantId: null,
-      selectedServiceId: 'vpc',
-      selectedCategoryId: 'network',
+    set((state) => {
+      const service = state.selectedServiceId ? getServiceById(state.selectedServiceId) : undefined
+      return {
+        sceneView: 'world',
+        selectedOccupantId: null,
+        selectedServiceId: state.selectedServiceId ?? 'vpc',
+        selectedCategoryId: service?.category ?? 'network',
+      }
     }),
   setZoomLevel: (level) => set({ zoomLevel: level }),
 }))

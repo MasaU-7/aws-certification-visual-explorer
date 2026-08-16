@@ -1,9 +1,15 @@
 import { Edges, Html } from '@react-three/drei'
 import {
+  AWS_CLOUD_CENTER,
+  AWS_CLOUD_COLOR,
+  AWS_CLOUD_SIZE,
   AZ_COLOR,
   AZ_SIZE,
   getAzCenter,
   getSubnetCenter,
+  ONPREM_CENTER,
+  ONPREM_COLOR,
+  ONPREM_SIZE,
   PRIVATE_COLOR,
   PUBLIC_COLOR,
   SUBNET_SIZE,
@@ -54,6 +60,20 @@ function AzDistrict({ az }: { az: AvailabilityZoneId }) {
 export function CityDistricts() {
   return (
     <group>
+      <mesh position={AWS_CLOUD_CENTER}>
+        <boxGeometry args={AWS_CLOUD_SIZE} />
+        <meshStandardMaterial color={AWS_CLOUD_COLOR} transparent opacity={0.035} depthWrite={false} />
+        <Edges color={AWS_CLOUD_COLOR} threshold={15} />
+      </mesh>
+      <Html
+        position={[AWS_CLOUD_CENTER[0], 2.02, AWS_CLOUD_CENTER[2] - 3.35]}
+        center
+        distanceFactor={16}
+        style={{ pointerEvents: 'none' }}
+      >
+        <div className="city-sign city-sign--aws">AWS</div>
+      </Html>
+
       <mesh position={[0, 0.62, 0.03]}>
         <boxGeometry args={VPC_SIZE} />
         <meshStandardMaterial color={VPC_COLOR} transparent opacity={0.04} depthWrite={false} />
@@ -75,6 +95,20 @@ export function CityDistricts() {
       <SubnetSlab az="az-b" tier="public" />
       <SubnetSlab az="az-a" tier="private" />
       <SubnetSlab az="az-b" tier="private" />
+
+      <mesh position={ONPREM_CENTER}>
+        <boxGeometry args={ONPREM_SIZE} />
+        <meshStandardMaterial color={ONPREM_COLOR} transparent opacity={0.07} depthWrite={false} />
+        <Edges color={ONPREM_COLOR} threshold={15} />
+      </mesh>
+      <Html
+        position={[ONPREM_CENTER[0], 1.48, ONPREM_CENTER[2]]}
+        center
+        distanceFactor={14}
+        style={{ pointerEvents: 'none' }}
+      >
+        <div className="city-sign city-sign--onprem">On-prem</div>
+      </Html>
     </group>
   )
 }

@@ -1,10 +1,12 @@
-import type { AvailabilityZoneId, CityOccupant, SubnetTier } from '@/types/aws'
+import type { AvailabilityZoneId, CityFlowRole, CityOccupant, SubnetTier } from '@/types/aws'
 
 export const VPC_COLOR = '#8C4FFF'
 export const AZ_COLOR = '#E8A317'
 export const PUBLIC_COLOR = '#3FA36A'
 export const PRIVATE_COLOR = '#3D7EC9'
 export const INTERNET_COLOR = '#9ED4FF'
+export const AWS_CLOUD_COLOR = '#5B8DEF'
+export const ONPREM_COLOR = '#8A93A6'
 
 const AZ_X: Record<AvailabilityZoneId, number> = {
   'az-a': -2.15,
@@ -19,6 +21,12 @@ const TIER_Z: Record<SubnetTier, number> = {
 export const SUBNET_SIZE: [number, number, number] = [3.95, 0.06, 2.28]
 export const AZ_SIZE: [number, number, number] = [4.15, 1.55, 5.05]
 export const VPC_SIZE: [number, number, number] = [8.7, 1.75, 5.55]
+export const AWS_CLOUD_SIZE: [number, number, number] = [11.55, 2.08, 7.15]
+export const ONPREM_SIZE: [number, number, number] = [2.35, 1.25, 3.55]
+
+/** VPC + VGW / TGW / DX GW / Client VPN。Internet と On-prem は外側。 */
+export const AWS_CLOUD_CENTER: [number, number, number] = [-1.05, 0.74, 0.38]
+export const ONPREM_CENTER: [number, number, number] = [-9.85, 0.64, 0.03]
 
 export function getAzCenter(az: AvailabilityZoneId): [number, number, number] {
   return [AZ_X[az], 0.55, 0.03]
@@ -39,21 +47,39 @@ export function getZoneSlot(
   return [cx + dx, 0.42, cz]
 }
 
-export const GATE_POSITIONS = {
-  internet: [0, 1.85, 5.55] as [number, number, number],
-  igw: [0, 0.55, 3.42] as [number, number, number],
+const FIXED_POSITIONS: Record<string, [number, number, number]> = {
+  route53: [0, 2.42, 6.78],
+  internet: [0, 1.85, 5.55],
+  igw: [0, 0.55, 3.42],
+  tgw: [-5.35, 0.55, 1.05],
+  dxgw: [-6.2, 0.55, 0.03],
+  dx: [-7.7, 0.55, 0.03],
+  vpn: [-5.95, 0.55, -1.32],
+  vgw: [-4.55, 0.55, -1.32],
+  'client-vpn': [-5.35, 0.55, 2.18],
+  onprem: [-9.85, 0.95, 0.03],
 }
 
-export const FLOW_COLORS: Record<'ingress' | 'app' | 'data' | 'egress', string> = {
+export const FLOW_COLORS: Record<CityFlowRole, string> = {
   ingress: '#9ED4FF',
   app: '#ED7100',
   data: '#C925D1',
   egress: '#7AA116',
+  hybrid: '#A78BFA',
+}
+
+/** Internet 越えの VPN 区間だけ破線（S2S / Client VPN）。IGW への公開入口は実線。 */
+export function isInternetVpnHop(from: string, to: string) {
+  return (
+    (from === 'onprem' && to === 'internet') ||
+    (from === 'internet' && to === 'vpn') ||
+    (from === 'internet' && to === 'client-vpn')
+  )
 }
 
 export function getOccupantPosition(occupant: CityOccupant): [number, number, number] {
-  if (occupant.id === 'internet') return GATE_POSITIONS.internet
-  if (occupant.id === 'igw') return GATE_POSITIONS.igw
+  const fixed = FIXED_POSITIONS[occupant.id]
+  if (fixed) return fixed
   if (!occupant.az || !occupant.tier) return [0, 0.42, 0]
 
   const slot: 0 | 1 = occupant.kind === 'nat' || occupant.serviceId === 'rds' ? 1 : 0

@@ -247,6 +247,15 @@ button:disabled {
   font-size: 13px;
 }
 
+.city-sign--aws {
+  color: #8eb6ff;
+  font-size: 13px;
+}
+
+.city-sign--onprem {
+  color: #c5ccd6;
+}
+
 .loc-chip--public {
   border-color: rgba(63, 163, 106, 0.55);
 }
@@ -258,6 +267,32 @@ button:disabled {
 .loc-chip--az-a,
 .loc-chip--az-b {
   border-color: rgba(232, 163, 23, 0.5);
+}
+
+.loc-chip--aws,
+.loc-chip--vpc {
+  border-color: rgba(91, 141, 239, 0.55);
+}
+
+.loc-chip--dns {
+  border-color: rgba(167, 139, 250, 0.55);
+}
+
+.loc-chip--dx-location,
+.loc-chip--dedicated {
+  border-color: rgba(167, 139, 250, 0.7);
+}
+
+.loc-chip--over-internet {
+  border-color: rgba(158, 212, 255, 0.65);
+}
+
+.loc-chip--on-prem {
+  border-color: rgba(138, 147, 166, 0.6);
+}
+
+.loc-chip--outside {
+  border-color: rgba(158, 212, 255, 0.5);
 }
 
 .inspector__icon {

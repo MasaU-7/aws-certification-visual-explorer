@@ -9,7 +9,7 @@
 SAA-C03 で構成の選択肢になるものをノードにする。リソースや廃止方向のものはノードにしない。
 
 - Compute: EC2 / Lambda / Auto Scaling / ECS / Batch
-- Networking: VPC / ELB / Route 53 / Direct Connect / Site-to-Site VPN / Client VPN / Direct Connect GW / Transit Gateway
+- Networking: VPC / ELB / Route 53 / Direct Connect / Site-to-Site VPN / VPN GW / Client VPN / Direct Connect GW / Transit Gateway
 - CDN / Edge: CloudFront / Global Accelerator
 - Storage: S3 / EBS / EFS / FSx / Storage Gateway / Snowball / Transfer Family / DataSync
 - Databases: RDS / Aurora / DynamoDB / Redshift / ElastiCache / MemoryDB / Neptune / DocumentDB / Keyspaces / Timestream

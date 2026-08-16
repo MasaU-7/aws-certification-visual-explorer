@@ -25,7 +25,7 @@ export function VpcCityContent() {
         rotation={[-Math.PI / 2, 0, 0]}
         onClick={() => selectOccupant(null)}
       >
-        <circleGeometry args={[16, 64]} />
+        <circleGeometry args={[22, 64]} />
         <meshBasicMaterial color="#070b14" transparent opacity={0} />
       </mesh>
     </>
