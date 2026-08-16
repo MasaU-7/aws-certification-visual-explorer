@@ -27,7 +27,9 @@ export type VisualShape =
 
 export type AppMode = 'explore' | 'scenario' | 'architecture'
 
-export type SceneView = 'world' | 'vpc-city'
+export type SceneView = 'world' | 'network-city' | 'compute-city'
+
+export type CityView = Exclude<SceneView, 'world'>
 
 export type AvailabilityZoneId = 'az-a' | 'az-b'
 
@@ -35,7 +37,7 @@ export type SubnetTier = 'public' | 'private'
 
 export type CityOccupantKind = 'internet' | 'igw' | 'nat' | 'service' | 'onprem'
 
-export type CityFlowRole = 'ingress' | 'app' | 'data' | 'egress' | 'hybrid'
+export type CityFlowRole = 'ingress' | 'app' | 'data' | 'egress' | 'hybrid' | 'scale' | 'event'
 
 export interface CityOccupant {
   id: string

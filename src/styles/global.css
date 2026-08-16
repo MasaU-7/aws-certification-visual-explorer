@@ -256,6 +256,10 @@ button:disabled {
   color: #c5ccd6;
 }
 
+.city-sign--managed {
+  color: #ed9a4a;
+}
+
 .loc-chip--public {
   border-color: rgba(63, 163, 106, 0.55);
 }
@@ -293,6 +297,17 @@ button:disabled {
 
 .loc-chip--outside {
   border-color: rgba(158, 212, 255, 0.5);
+}
+
+.loc-chip--managed,
+.loc-chip--outside-vpc,
+.loc-chip--in-vpc,
+.loc-chip--group,
+.loc-chip--scheduler,
+.loc-chip--task,
+.loc-chip--event,
+.loc-chip--metrics {
+  border-color: rgba(237, 113, 0, 0.55);
 }
 
 .inspector__icon {

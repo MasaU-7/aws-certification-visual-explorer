@@ -66,6 +66,8 @@ export const FLOW_COLORS: Record<CityFlowRole, string> = {
   data: '#C925D1',
   egress: '#7AA116',
   hybrid: '#A78BFA',
+  scale: '#FFB020',
+  event: '#E7157B',
 }
 
 /** Internet 越えの VPN 区間だけ破線（S2S / Client VPN）。IGW への公開入口は実線。 */

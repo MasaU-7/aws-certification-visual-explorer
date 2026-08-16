@@ -4,23 +4,25 @@ import { ModeSwitcher } from './ModeSwitcher'
 import { ServiceInspector } from './ServiceInspector'
 import { WorldScene } from '@/scene/WorldScene'
 import { certifications } from '@/data/certifications'
+import { isCityView } from '@/data/cities'
 import { useExplorerStore } from '@/store/explorerStore'
 
 export function AppShell() {
   const certificationId = useExplorerStore((s) => s.certificationId)
   const sceneView = useExplorerStore((s) => s.sceneView)
-  const exitVpcCity = useExplorerStore((s) => s.exitVpcCity)
+  const exitCity = useExplorerStore((s) => s.exitCity)
   const cert = certifications.find((c) => c.id === certificationId)
-  const isCity = sceneView === 'vpc-city'
+  const isCity = isCityView(sceneView)
+  const isCompute = sceneView === 'compute-city'
 
   useEffect(() => {
     if (!isCity) return
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') exitVpcCity()
+      if (event.key === 'Escape') exitCity()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [isCity, exitVpcCity])
+  }, [isCity, exitCity])
 
   return (
     <div className="app-shell">
@@ -35,12 +37,21 @@ export function AppShell() {
       <main className="stage">
         <WorldScene />
         <div className="stage-caption">
-          {isCity ? (
+          {isCompute ? (
             <>
-              <p className="stage-caption__world">VPC City</p>
+              <p className="stage-caption__world">Compute City</p>
+              <p className="stage-caption__cert">VPC 内 · Managed</p>
+              <p className="stage-caption__hint">Lambda は既定で VPC 外</p>
+              <button type="button" className="stage-caption__back" onClick={exitCity}>
+                AWS World
+              </button>
+            </>
+          ) : isCity ? (
+            <>
+              <p className="stage-caption__world">Networking City</p>
               <p className="stage-caption__cert">Internet · AWS · On-prem</p>
               <p className="stage-caption__hint">DX は専用 · VPN は Internet 経由</p>
-              <button type="button" className="stage-caption__back" onClick={exitVpcCity}>
+              <button type="button" className="stage-caption__back" onClick={exitCity}>
                 AWS World
               </button>
             </>

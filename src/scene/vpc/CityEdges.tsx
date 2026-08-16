@@ -1,8 +1,8 @@
 import { QuadraticBezierLine } from '@react-three/drei'
-import { getCityOccupant, vpcCity } from '@/data/vpc'
 import { getArcMidpoint } from '@/scene/layout/serviceLayout'
-import { FLOW_COLORS, getOccupantPosition, isInternetVpnHop } from '@/scene/vpc/cityLayout'
+import { FLOW_COLORS } from '@/scene/vpc/cityLayout'
 import { useExplorerStore } from '@/store/explorerStore'
+import type { CityFlow, CityOccupant, VpcCityDefinition } from '@/types/aws'
 
 function isLinkedOccupant(
   occupant: { id: string; serviceId?: string },
@@ -13,36 +13,45 @@ function isLinkedOccupant(
   return Boolean(occupant.serviceId && occupant.serviceId === selectedServiceId)
 }
 
-const VPN_TUNNEL_FLOWS = new Set(['vpn-over-net', 'vpn-in', 'vpn-vgw', 'vgw-a', 'vgw-b'])
+interface CityEdgesProps {
+  city: VpcCityDefinition
+  getOccupant: (id: string) => CityOccupant | undefined
+  getPosition: (occupant: CityOccupant) => [number, number, number]
+  hubServiceId?: string | null
+  extraLinkedFlowIds?: (selectedOccupantId: string | null, selectedServiceId: string | null) => Set<string>
+  isDashed?: (flow: CityFlow) => boolean
+}
 
-export function CityEdges() {
+export function CityEdges({
+  city,
+  getOccupant,
+  getPosition,
+  hubServiceId = 'vpc',
+  extraLinkedFlowIds,
+  isDashed,
+}: CityEdgesProps) {
   const selectedOccupantId = useExplorerStore((s) => s.selectedOccupantId)
   const selectedServiceId = useExplorerStore((s) => s.selectedServiceId)
+  const extra = extraLinkedFlowIds?.(selectedOccupantId, selectedServiceId) ?? new Set<string>()
 
   return (
     <>
-      {vpcCity.flows.map((flow) => {
-        const fromOcc = getCityOccupant(flow.from)
-        const toOcc = getCityOccupant(flow.to)
+      {city.flows.map((flow) => {
+        const fromOcc = getOccupant(flow.from)
+        const toOcc = getOccupant(flow.to)
         if (!fromOcc || !toOcc) return null
-        const from = getOccupantPosition(fromOcc)
-        const to = getOccupantPosition(toOcc)
+        const from = getPosition(fromOcc)
+        const to = getPosition(toOcc)
         if (!from || !to) return null
 
         const focused =
-          Boolean(selectedOccupantId) || Boolean(selectedServiceId && selectedServiceId !== 'vpc')
-        const vpnFocus =
-          selectedOccupantId === 'vpn' ||
-          selectedOccupantId === 'vgw' ||
-          selectedOccupantId === 'onprem' ||
-          selectedServiceId === 'site-to-site-vpn' ||
-          selectedServiceId === 'vpn-gateway'
+          Boolean(selectedOccupantId) || Boolean(selectedServiceId && selectedServiceId !== hubServiceId)
         const linked =
           !focused ||
           isLinkedOccupant(fromOcc, selectedOccupantId, selectedServiceId) ||
           isLinkedOccupant(toOcc, selectedOccupantId, selectedServiceId) ||
-          (vpnFocus && VPN_TUNNEL_FLOWS.has(flow.id))
-        const dashed = flow.role === 'egress' || isInternetVpnHop(flow.from, flow.to)
+          extra.has(flow.id)
+        const dashed = isDashed ? isDashed(flow) : flow.role === 'egress'
         const mid = getArcMidpoint(from, to, dashed ? 0.55 : 0.28)
 
         return (

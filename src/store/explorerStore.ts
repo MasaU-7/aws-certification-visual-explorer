@@ -1,7 +1,15 @@
 import { create } from 'zustand'
+import {
+  categoryForCity,
+  cityContainingService,
+  getActiveOccupant,
+  getActivePrimaryOccupantId,
+  getEntryCity,
+  isCityView,
+  isServiceInCity,
+} from '@/data/cities'
 import { getServiceById } from '@/data/services'
-import { getCityOccupant, getPrimaryOccupantId, isNetworkCityEntry, isVpcCityService } from '@/data/vpc'
-import type { AppMode, CertificationId, SceneView } from '@/types/aws'
+import type { AppMode, CertificationId, CityView, SceneView } from '@/types/aws'
 
 interface ExplorerState {
   certificationId: CertificationId
@@ -17,12 +25,12 @@ interface ExplorerState {
   selectService: (id: string | null) => void
   clickService: (id: string) => void
   selectOccupant: (id: string | null) => void
-  enterVpcCity: (serviceId?: string) => void
-  exitVpcCity: () => void
+  enterCity: (view: CityView, serviceId?: string) => void
+  exitCity: () => void
   setZoomLevel: (level: number) => void
 }
 
-export const useExplorerStore = create<ExplorerState>((set) => ({
+export const useExplorerStore = create<ExplorerState>((set, get) => ({
   certificationId: 'SAA-C03',
   mode: 'explore',
   sceneView: 'world',
@@ -46,23 +54,34 @@ export const useExplorerStore = create<ExplorerState>((set) => ({
       sceneView: 'world',
     }),
   selectService: (id) =>
-    set((state) => ({
-      selectedServiceId: id,
-      selectedOccupantId: state.sceneView === 'vpc-city' ? getPrimaryOccupantId(id) : null,
-      sceneView:
-        id && state.sceneView === 'vpc-city' && !isVpcCityService(id)
-          ? 'world'
-          : state.sceneView,
-    })),
+    set((state) => {
+      if (!id) {
+        return { selectedServiceId: null, selectedOccupantId: null }
+      }
+      if (!isCityView(state.sceneView)) {
+        return { selectedServiceId: id, selectedOccupantId: null }
+      }
+      const nextView = cityContainingService(id, state.sceneView)
+      if (!nextView) {
+        return { selectedServiceId: id, selectedOccupantId: null, sceneView: 'world' }
+      }
+      return {
+        sceneView: nextView,
+        selectedCategoryId: categoryForCity(nextView),
+        selectedServiceId: id,
+        selectedOccupantId: getActivePrimaryOccupantId(nextView, id),
+      }
+    }),
   clickService: (id) =>
     set((state) => {
       if (state.selectedServiceId === id) {
-        if (isNetworkCityEntry(id) && state.sceneView === 'world') {
+        const entry = getEntryCity(id)
+        if (entry && state.sceneView === 'world') {
           return {
-            sceneView: 'vpc-city' as const,
-            selectedCategoryId: 'network',
+            sceneView: entry,
+            selectedCategoryId: categoryForCity(entry),
             selectedServiceId: id,
-            selectedOccupantId: getPrimaryOccupantId(id),
+            selectedOccupantId: getActivePrimaryOccupantId(entry, id),
           }
         }
         return {
@@ -71,13 +90,29 @@ export const useExplorerStore = create<ExplorerState>((set) => ({
         }
       }
 
+      if (isCityView(state.sceneView) && !isServiceInCity(state.sceneView, id)) {
+        const nextView = cityContainingService(id, state.sceneView)
+        if (nextView) {
+          return {
+            sceneView: nextView,
+            selectedCategoryId: categoryForCity(nextView),
+            selectedServiceId: id,
+            selectedOccupantId: getActivePrimaryOccupantId(nextView, id),
+          }
+        }
+        return {
+          selectedServiceId: id,
+          selectedOccupantId: null,
+          sceneView: 'world',
+        }
+      }
+
       return {
         selectedServiceId: id,
-        selectedOccupantId: null,
-        sceneView:
-          state.sceneView === 'vpc-city' && !isVpcCityService(id)
-            ? 'world'
-            : state.sceneView,
+        selectedOccupantId: isCityView(state.sceneView)
+          ? getActivePrimaryOccupantId(state.sceneView, id)
+          : null,
+        sceneView: state.sceneView,
       }
     }),
   selectOccupant: (id) => {
@@ -85,27 +120,29 @@ export const useExplorerStore = create<ExplorerState>((set) => ({
       set({ selectedOccupantId: null, selectedServiceId: null })
       return
     }
-    const occupant = getCityOccupant(id)
+    const occupant = getActiveOccupant(get().sceneView, id)
     set({
       selectedOccupantId: id,
       selectedServiceId: occupant?.serviceId ?? null,
     })
   },
-  enterVpcCity: (serviceId = 'vpc') =>
+  enterCity: (view, serviceId) =>
     set({
-      sceneView: 'vpc-city',
-      selectedCategoryId: 'network',
-      selectedServiceId: serviceId,
-      selectedOccupantId: getPrimaryOccupantId(serviceId),
+      sceneView: view,
+      selectedCategoryId: categoryForCity(view),
+      selectedServiceId: serviceId ?? (view === 'compute-city' ? 'ec2' : 'vpc'),
+      selectedOccupantId: getActivePrimaryOccupantId(view, serviceId ?? (view === 'compute-city' ? 'ec2' : 'vpc')),
     }),
-  exitVpcCity: () =>
+  exitCity: () =>
     set((state) => {
       const service = state.selectedServiceId ? getServiceById(state.selectedServiceId) : undefined
+      const fallbackCategory = isCityView(state.sceneView) ? categoryForCity(state.sceneView) : 'network'
       return {
         sceneView: 'world',
         selectedOccupantId: null,
-        selectedServiceId: state.selectedServiceId ?? 'vpc',
-        selectedCategoryId: service?.category ?? 'network',
+        selectedServiceId:
+          state.selectedServiceId ?? (state.sceneView === 'compute-city' ? 'ec2' : 'vpc'),
+        selectedCategoryId: service?.category ?? fallbackCategory,
       }
     }),
   setZoomLevel: (level) => set({ zoomLevel: level }),
