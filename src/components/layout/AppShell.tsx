@@ -21,6 +21,7 @@ export function AppShell() {
   const isSecurity = sceneView === 'security-city'
   const isIntegration = sceneView === 'integration-city'
   const isAnalytics = sceneView === 'analytics-city'
+  const isManagement = sceneView === 'management-city'
 
   useEffect(() => {
     if (!isCity) return
@@ -103,6 +104,15 @@ export function AppShell() {
               <p className="stage-caption__world">Analytics City</p>
               <p className="stage-caption__cert">Stream · Lake · Cluster</p>
               <p className="stage-caption__hint">Kinesis は stream · Athena は S3 を SQL</p>
+              <button type="button" className="stage-caption__back" onClick={exitCity}>
+                AWS World
+              </button>
+            </>
+          ) : isManagement ? (
+            <>
+              <p className="stage-caption__world">Management City</p>
+              <p className="stage-caption__cert">Ops · Observe · Govern</p>
+              <p className="stage-caption__hint">CloudWatch はメトリクス · SSM は Session</p>
               <button type="button" className="stage-caption__back" onClick={exitCity}>
                 AWS World
               </button>

@@ -289,6 +289,10 @@ button:disabled {
   color: #2cb8aa;
 }
 
+.city-sign--ops {
+  color: #e74a98;
+}
+
 .city-legend {
   position: absolute;
   left: 1.25rem;
@@ -502,6 +506,14 @@ button:disabled {
 .loc-chip--lake,
 .loc-chip--bi {
   border-color: rgba(27, 154, 142, 0.65);
+}
+
+.loc-chip--stack,
+.loc-chip--session,
+.loc-chip--cost,
+.loc-chip--threshold,
+.loc-chip--log {
+  border-color: rgba(231, 21, 123, 0.6);
 }
 
 .inspector__icon {
