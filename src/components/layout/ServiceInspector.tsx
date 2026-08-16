@@ -157,7 +157,9 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
               ? ['region', 'classify']
               : sceneView === 'analytics-city'
                 ? ['region', 'lake']
-                : ['AWS', 'event']),
+                : sceneView === 'management-city'
+                  ? ['region', 'log']
+                  : ['AWS', 'event']),
     )
   }
   if (occupant.serviceId === 'rds') chips.push('RDB', 'multi-AZ')
@@ -205,6 +207,10 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
   if (occupant.serviceId === 'firewall-manager') chips.push('AWS', 'org-scope')
   if (occupant.serviceId === 'cloudtrail') chips.push('AWS', 'audit')
   if (occupant.serviceId === 'config') chips.push('AWS', 'compliance')
+  if (occupant.serviceId === 'cloudformation') chips.push('AWS', 'stack')
+  if (occupant.serviceId === 'systems-manager') chips.push('AWS', 'session')
+  if (occupant.serviceId === 'cost-explorer') chips.push('AWS', 'cost')
+  if (occupant.serviceId === 'budgets') chips.push('AWS', 'threshold')
   if (occupant.serviceId === 'elb' && sceneView === 'cdn-city') {
     chips.push('origin', occupant.id.startsWith('nlb') ? 'L4' : 'L7')
   }
