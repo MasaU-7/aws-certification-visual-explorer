@@ -3,6 +3,7 @@ import { fixtureIcons, serviceIcons } from '@/data/icons'
 import { getServiceById } from '@/data/services'
 import { getCdnOccupantPosition } from '@/scene/cdn/cdnLayout'
 import { getComputeOccupantPosition } from '@/scene/compute/computeLayout'
+import { getStorageOccupantPosition } from '@/scene/storage/storageLayout'
 import { getOccupantPosition, INTERNET_COLOR, ONPREM_COLOR } from '@/scene/vpc/cityLayout'
 import { useExplorerStore } from '@/store/explorerStore'
 import type { CityOccupant } from '@/types/aws'
@@ -24,7 +25,9 @@ export function CityOccupantNode({ occupant }: CityOccupantNodeProps) {
       ? getComputeOccupantPosition(occupant)
       : sceneView === 'cdn-city'
         ? getCdnOccupantPosition(occupant)
-        : getOccupantPosition(occupant)
+        : sceneView === 'storage-city'
+          ? getStorageOccupantPosition(occupant)
+          : getOccupantPosition(occupant)
   const serviceColor = occupant.serviceId
     ? getServiceById(occupant.serviceId)?.visual.color
     : '#8C4FFF'

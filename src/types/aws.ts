@@ -27,7 +27,7 @@ export type VisualShape =
 
 export type AppMode = 'explore' | 'scenario' | 'architecture'
 
-export type SceneView = 'world' | 'network-city' | 'compute-city' | 'cdn-city'
+export type SceneView = 'world' | 'network-city' | 'compute-city' | 'cdn-city' | 'storage-city'
 
 export type CityView = Exclude<SceneView, 'world'>
 
@@ -38,6 +38,15 @@ export type SubnetTier = 'public' | 'private'
 export type CityOccupantKind = 'internet' | 'igw' | 'nat' | 'service' | 'onprem'
 
 export type CityFlowRole = 'ingress' | 'app' | 'data' | 'egress' | 'hybrid' | 'scale' | 'event'
+
+/** 線の意味。色は role、形は kind、矢印は direction。 */
+export type CityLinkKind = 'path' | 'attach' | 'associate' | 'access'
+
+/** fwd: from→to、both: 双方向、none: 向きなし（アタッチ等） */
+export type CityLinkDirection = 'fwd' | 'both' | 'none'
+
+/** 導線の媒体。破線の理由を path と区別する。 */
+export type CityLinkOverlay = 'internet' | 'offline'
 
 export interface CityOccupant {
   id: string
@@ -54,6 +63,9 @@ export interface CityFlow {
   from: string
   to: string
   role: CityFlowRole
+  kind: CityLinkKind
+  direction: CityLinkDirection
+  overlay?: CityLinkOverlay
 }
 
 export interface VpcCityDefinition {

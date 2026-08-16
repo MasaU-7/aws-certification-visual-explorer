@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { CertFilterBar } from './CertFilterBar'
+import { CityLinkLegend } from './CityLinkLegend'
 import { ModeSwitcher } from './ModeSwitcher'
 import { ServiceInspector } from './ServiceInspector'
 import { WorldScene } from '@/scene/WorldScene'
@@ -15,6 +16,7 @@ export function AppShell() {
   const isCity = isCityView(sceneView)
   const isCompute = sceneView === 'compute-city'
   const isCdn = sceneView === 'cdn-city'
+  const isStorage = sceneView === 'storage-city'
 
   useEffect(() => {
     if (!isCity) return
@@ -56,6 +58,15 @@ export function AppShell() {
                 AWS World
               </button>
             </>
+          ) : isStorage ? (
+            <>
+              <p className="stage-caption__world">Storage City</p>
+              <p className="stage-caption__cert">VPC · Object · On-prem</p>
+              <p className="stage-caption__hint">EBS はアタッチ · S3 は API</p>
+              <button type="button" className="stage-caption__back" onClick={exitCity}>
+                AWS World
+              </button>
+            </>
           ) : isCity ? (
             <>
               <p className="stage-caption__world">Networking City</p>
@@ -74,6 +85,7 @@ export function AppShell() {
           )}
         </div>
         <ServiceInspector />
+        <CityLinkLegend />
       </main>
 
       <footer className="bottom-bar">

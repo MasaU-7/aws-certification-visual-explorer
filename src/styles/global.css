@@ -269,6 +269,118 @@ button:disabled {
   color: #9ec85a;
 }
 
+.city-legend {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1rem;
+  z-index: 2;
+  pointer-events: none;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(12, 18, 32, 0.55);
+  backdrop-filter: blur(12px);
+  min-width: 11.5rem;
+}
+
+.city-legend__title {
+  margin: 0 0 0.4rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.city-legend__list,
+.city-legend__roles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.city-legend__list li,
+.city-legend__roles li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  color: var(--text);
+}
+
+.city-legend__roles {
+  margin-top: 0.45rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--border);
+}
+
+.city-legend__swatch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 2.4rem;
+  height: 0.7rem;
+  flex-shrink: 0;
+}
+
+.city-legend__line {
+  display: block;
+  flex: 1;
+  height: 2px;
+  background: currentColor;
+  border-top: none;
+}
+
+.city-legend__line.is-dashed {
+  height: 0;
+  background: transparent;
+  border-top: 2px dashed;
+}
+
+.city-legend__line.is-dotted {
+  height: 0;
+  background: transparent;
+  border-top: 2px dotted;
+}
+
+.city-legend__caret {
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid;
+  margin-left: 1px;
+}
+
+.city-legend__caret--left {
+  border-left: none;
+  border-right: 6px solid;
+  margin-left: 0;
+  margin-right: 1px;
+}
+
+.city-legend__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.loc-chip--object,
+.loc-chip--block,
+.loc-chip--nfs,
+.loc-chip--file,
+.loc-chip--sftp,
+.loc-chip--online,
+.loc-chip--offline,
+.loc-chip--hybrid,
+.loc-chip--same-az,
+.loc-chip--multi-az {
+  border-color: rgba(122, 161, 22, 0.6);
+}
+
 .loc-chip--public {
   border-color: rgba(63, 163, 106, 0.55);
 }

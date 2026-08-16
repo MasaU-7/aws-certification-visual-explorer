@@ -2,7 +2,7 @@ import { getCityOccupant, vpcCity } from '@/data/vpc'
 import { CityDistricts } from '@/scene/vpc/CityDistricts'
 import { CityEdges } from '@/scene/vpc/CityEdges'
 import { CityOccupantNode } from '@/scene/vpc/CityOccupantNode'
-import { getOccupantPosition, isInternetVpnHop } from '@/scene/vpc/cityLayout'
+import { getOccupantPosition } from '@/scene/vpc/cityLayout'
 import { useExplorerStore } from '@/store/explorerStore'
 
 const VPN_TUNNEL_FLOWS = new Set(['vpn-over-net', 'vpn-in', 'vpn-vgw', 'vgw-a', 'vgw-b'])
@@ -31,7 +31,6 @@ export function VpcCityContent() {
             serviceId === 'vpn-gateway'
           return vpnFocus ? VPN_TUNNEL_FLOWS : new Set()
         }}
-        isDashed={(flow) => flow.role === 'egress' || isInternetVpnHop(flow.from, flow.to)}
       />
       {vpcCity.occupants.map((occupant) => (
         <CityOccupantNode key={occupant.id} occupant={occupant} />
