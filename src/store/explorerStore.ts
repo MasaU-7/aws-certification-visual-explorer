@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import {
   categoryForCity,
   cityContainingService,
+  defaultCityService,
   getActiveOccupant,
   getActivePrimaryOccupantId,
   getEntryCity,
@@ -126,13 +127,15 @@ export const useExplorerStore = create<ExplorerState>((set, get) => ({
       selectedServiceId: occupant?.serviceId ?? null,
     })
   },
-  enterCity: (view, serviceId) =>
+  enterCity: (view, serviceId) => {
+    const id = serviceId ?? defaultCityService(view)
     set({
       sceneView: view,
       selectedCategoryId: categoryForCity(view),
-      selectedServiceId: serviceId ?? (view === 'compute-city' ? 'ec2' : 'vpc'),
-      selectedOccupantId: getActivePrimaryOccupantId(view, serviceId ?? (view === 'compute-city' ? 'ec2' : 'vpc')),
-    }),
+      selectedServiceId: id,
+      selectedOccupantId: getActivePrimaryOccupantId(view, id),
+    })
+  },
   exitCity: () =>
     set((state) => {
       const service = state.selectedServiceId ? getServiceById(state.selectedServiceId) : undefined
@@ -141,7 +144,8 @@ export const useExplorerStore = create<ExplorerState>((set, get) => ({
         sceneView: 'world',
         selectedOccupantId: null,
         selectedServiceId:
-          state.selectedServiceId ?? (state.sceneView === 'compute-city' ? 'ec2' : 'vpc'),
+          state.selectedServiceId ??
+          (isCityView(state.sceneView) ? defaultCityService(state.sceneView) : 'vpc'),
         selectedCategoryId: service?.category ?? fallbackCategory,
       }
     }),

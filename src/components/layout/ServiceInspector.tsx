@@ -122,19 +122,38 @@ export function ServiceInspector() {
 }
 
 function LocationSection({ occupant }: { occupant: CityOccupant }) {
+  const sceneView = useExplorerStore((s) => s.sceneView)
   const chips: string[] = []
   if (occupant.kind === 'internet') chips.push('outside')
-  if (occupant.kind === 'igw') chips.push('AWS', 'edge')
+  if (occupant.kind === 'igw') {
+    chips.push(sceneView === 'cdn-city' ? 'region' : 'AWS', sceneView === 'cdn-city' ? 'VPC' : 'edge')
+  }
   if (occupant.kind === 'onprem') chips.push('on-prem')
-  if (occupant.id === 'lambda') chips.push('AWS', 'managed', 'outside VPC')
+  if (occupant.id === 'lambda') {
+    chips.push(
+      ...(sceneView === 'cdn-city'
+        ? ['region', 'origin']
+        : ['AWS', 'managed', 'outside VPC']),
+    )
+  }
+  if (occupant.id === 'lambda-edge') chips.push('edge', 'PoP', 'Lambda@Edge')
   if (occupant.id === 'lambda-vpc') chips.push('in VPC')
   if (occupant.id === 'asg') chips.push('AWS', 'group')
   if (occupant.id === 'cloudwatch') chips.push('AWS', 'metrics')
   if (occupant.id === 'dynamodb') chips.push('AWS', 'managed')
   if (occupant.id === 'batch' && !occupant.az) chips.push('AWS', 'scheduler')
   if (occupant.serviceId === 'ecs' && occupant.az) chips.push('task')
-  if (occupant.serviceId === 's3' && !occupant.az) chips.push('AWS', 'event')
+  if (occupant.serviceId === 's3' && !occupant.az) {
+    chips.push(sceneView === 'cdn-city' ? 'region' : 'AWS', sceneView === 'cdn-city' ? 'origin' : 'event')
+  }
   if (occupant.serviceId === 'sqs' && !occupant.az) chips.push('AWS', 'event')
+  if (occupant.serviceId === 'cloudfront') chips.push('edge', 'PoP', 'cache')
+  if (occupant.serviceId === 'global-accelerator') chips.push('edge', 'anycast')
+  if (occupant.serviceId === 'waf' || occupant.serviceId === 'shield') chips.push('edge')
+  if (occupant.serviceId === 'acm') chips.push('edge', 'tls')
+  if (occupant.serviceId === 'elb' && sceneView === 'cdn-city') {
+    chips.push('origin', occupant.id.startsWith('nlb') ? 'L4' : 'L7')
+  }
   if (occupant.serviceId === 'route53') chips.push('outside', 'dns')
   if (occupant.serviceId === 'direct-connect') chips.push('DX location', 'dedicated')
   if (occupant.serviceId === 'site-to-site-vpn') chips.push('over Internet')

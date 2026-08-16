@@ -27,7 +27,7 @@ export type VisualShape =
 
 export type AppMode = 'explore' | 'scenario' | 'architecture'
 
-export type SceneView = 'world' | 'network-city' | 'compute-city'
+export type SceneView = 'world' | 'network-city' | 'compute-city' | 'cdn-city'
 
 export type CityView = Exclude<SceneView, 'world'>
 
