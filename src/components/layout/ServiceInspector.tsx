@@ -153,7 +153,9 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
           ? ['region', 'object']
           : sceneView === 'database-city'
             ? ['region', 'COPY']
-            : ['AWS', 'event']),
+            : sceneView === 'security-city'
+              ? ['region', 'classify']
+              : ['AWS', 'event']),
     )
   }
   if (occupant.serviceId === 'rds') chips.push('RDB', 'multi-AZ')
@@ -179,6 +181,20 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
   if (occupant.serviceId === 'global-accelerator') chips.push('edge', 'anycast')
   if (occupant.serviceId === 'waf' || occupant.serviceId === 'shield') chips.push('edge')
   if (occupant.serviceId === 'acm') chips.push('edge', 'tls')
+  if (occupant.serviceId === 'iam') chips.push('AWS', 'account')
+  if (occupant.serviceId === 'organizations') chips.push('AWS', 'multi-account')
+  if (occupant.serviceId === 'identity-center') chips.push('AWS', 'SSO')
+  if (occupant.serviceId === 'directory-service') chips.push('directory', 'in VPC')
+  if (occupant.serviceId === 'kms') chips.push('AWS', 'CMK')
+  if (occupant.serviceId === 'cloudhsm') chips.push('HSM', 'in VPC')
+  if (occupant.serviceId === 'secrets-manager') chips.push('AWS', 'rotation')
+  if (occupant.serviceId === 'guardduty') chips.push('AWS', 'findings')
+  if (occupant.serviceId === 'security-hub') chips.push('AWS', 'hub')
+  if (occupant.serviceId === 'macie') chips.push('AWS', 'PII')
+  if (occupant.serviceId === 'inspector') chips.push('AWS', 'vuln')
+  if (occupant.serviceId === 'firewall-manager') chips.push('AWS', 'org-scope')
+  if (occupant.serviceId === 'cloudtrail') chips.push('AWS', 'audit')
+  if (occupant.serviceId === 'config') chips.push('AWS', 'compliance')
   if (occupant.serviceId === 'elb' && sceneView === 'cdn-city') {
     chips.push('origin', occupant.id.startsWith('nlb') ? 'L4' : 'L7')
   }

@@ -18,6 +18,7 @@ export function AppShell() {
   const isCdn = sceneView === 'cdn-city'
   const isStorage = sceneView === 'storage-city'
   const isDatabase = sceneView === 'database-city'
+  const isSecurity = sceneView === 'security-city'
 
   useEffect(() => {
     if (!isCity) return
@@ -73,6 +74,15 @@ export function AppShell() {
               <p className="stage-caption__world">Databases City</p>
               <p className="stage-caption__cert">VPC 内 · Serverless</p>
               <p className="stage-caption__hint">RDS は Multi-AZ · DynamoDB は VPC 外</p>
+              <button type="button" className="stage-caption__back" onClick={exitCity}>
+                AWS World
+              </button>
+            </>
+          ) : isSecurity ? (
+            <>
+              <p className="stage-caption__world">Security City</p>
+              <p className="stage-caption__cert">Identity · Edge · Detect</p>
+              <p className="stage-caption__hint">IAM はアカウント · WAF は Edge</p>
               <button type="button" className="stage-caption__back" onClick={exitCity}>
                 AWS World
               </button>
