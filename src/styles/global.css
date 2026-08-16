@@ -269,6 +269,10 @@ button:disabled {
   color: #9ec85a;
 }
 
+.city-sign--serverless {
+  color: #e07ae8;
+}
+
 .city-legend {
   position: absolute;
   left: 1.25rem;
@@ -446,7 +450,7 @@ button:disabled {
 
 .loc-chip--l4,
 .loc-chip--l7,
-.loc-chip--lambda@edge {
+.loc-chip--lambda\@edge {
   border-color: rgba(167, 139, 250, 0.65);
 }
 

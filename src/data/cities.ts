@@ -13,6 +13,13 @@ import {
   isComputeCityService,
 } from '@/data/compute'
 import {
+  databaseCity,
+  getDatabaseOccupant,
+  getDatabasePrimaryOccupantId,
+  isDatabaseCityEntry,
+  isDatabaseCityService,
+} from '@/data/database'
+import {
   getStorageOccupant,
   getStoragePrimaryOccupantId,
   isStorageCityEntry,
@@ -33,6 +40,7 @@ const CITY_BY_VIEW: Record<CityView, VpcCityDefinition> = {
   'compute-city': computeCity,
   'cdn-city': cdnCity,
   'storage-city': storageCity,
+  'database-city': databaseCity,
 }
 
 const CATEGORY_BY_CITY: Record<CityView, ServiceCategory> = {
@@ -40,6 +48,7 @@ const CATEGORY_BY_CITY: Record<CityView, ServiceCategory> = {
   'compute-city': 'compute',
   'cdn-city': 'cdn',
   'storage-city': 'storage',
+  'database-city': 'database',
 }
 
 const DEFAULT_SERVICE_BY_CITY: Record<CityView, string> = {
@@ -47,6 +56,7 @@ const DEFAULT_SERVICE_BY_CITY: Record<CityView, string> = {
   'compute-city': 'ec2',
   'cdn-city': 'cloudfront',
   'storage-city': 's3',
+  'database-city': 'rds',
 }
 
 export function isCityView(view: SceneView): view is CityView {
@@ -54,7 +64,8 @@ export function isCityView(view: SceneView): view is CityView {
     view === 'network-city' ||
     view === 'compute-city' ||
     view === 'cdn-city' ||
-    view === 'storage-city'
+    view === 'storage-city' ||
+    view === 'database-city'
   )
 }
 
@@ -71,6 +82,7 @@ export function getEntryCity(serviceId: string): CityView | null {
   if (isComputeCityEntry(serviceId)) return 'compute-city'
   if (isCdnCityEntry(serviceId)) return 'cdn-city'
   if (isStorageCityEntry(serviceId)) return 'storage-city'
+  if (isDatabaseCityEntry(serviceId)) return 'database-city'
   return null
 }
 
@@ -78,15 +90,19 @@ export function isServiceInCity(view: CityView, serviceId: string) {
   if (view === 'compute-city') return isComputeCityService(serviceId)
   if (view === 'cdn-city') return isCdnCityService(serviceId)
   if (view === 'storage-city') return isStorageCityService(serviceId)
+  if (view === 'database-city') return isDatabaseCityService(serviceId)
   return isVpcCityService(serviceId)
 }
 
 export function cityContainingService(serviceId: string, current: CityView): CityView | null {
   if (isServiceInCity(current, serviceId)) return current
+  const entry = getEntryCity(serviceId)
+  if (entry) return entry
   if (isComputeCityService(serviceId)) return 'compute-city'
   if (isVpcCityService(serviceId)) return 'network-city'
   if (isCdnCityService(serviceId)) return 'cdn-city'
   if (isStorageCityService(serviceId)) return 'storage-city'
+  if (isDatabaseCityService(serviceId)) return 'database-city'
   return null
 }
 
@@ -95,6 +111,7 @@ export function getActiveOccupant(view: SceneView, id: string) {
   if (view === 'network-city') return getVpcOccupant(id)
   if (view === 'cdn-city') return getCdnOccupant(id)
   if (view === 'storage-city') return getStorageOccupant(id)
+  if (view === 'database-city') return getDatabaseOccupant(id)
   return undefined
 }
 
@@ -102,6 +119,7 @@ export function getActivePrimaryOccupantId(view: CityView, serviceId: string | n
   if (view === 'compute-city') return getComputePrimaryOccupantId(serviceId)
   if (view === 'cdn-city') return getCdnPrimaryOccupantId(serviceId)
   if (view === 'storage-city') return getStoragePrimaryOccupantId(serviceId)
+  if (view === 'database-city') return getDatabasePrimaryOccupantId(serviceId)
   return getVpcPrimaryOccupantId(serviceId)
 }
 
