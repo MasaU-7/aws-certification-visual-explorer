@@ -9,6 +9,7 @@ import { buildRelationshipGraph } from '@/scene/layout/relatedServices'
 import { CdnCityContent } from '@/scene/cdn/CdnCityContent'
 import { ComputeCityContent } from '@/scene/compute/ComputeCityContent'
 import { DatabaseCityContent } from '@/scene/database/DatabaseCityContent'
+import { IntegrationCityContent } from '@/scene/integration/IntegrationCityContent'
 import { SecurityCityContent } from '@/scene/security/SecurityCityContent'
 import { StorageCityContent } from '@/scene/storage/StorageCityContent'
 import { VpcCityContent } from '@/scene/vpc/VpcCityContent'
@@ -35,6 +36,8 @@ function SceneCamera() {
       camera.position.set(0.65, 10.2, 15.8)
     } else if (sceneView === 'security-city') {
       camera.position.set(-0.15, 10.6, 16.4)
+    } else if (sceneView === 'integration-city') {
+      camera.position.set(1.75, 10.2, 15.8)
     } else {
       camera.position.set(0, 2.4, 15)
     }
@@ -163,7 +166,9 @@ export function WorldScene() {
               ? [0.65, 0.28, 0.15]
               : sceneView === 'security-city'
                 ? [-0.15, 0.28, 0.15]
-                : [0, 0, 0]
+                : sceneView === 'integration-city'
+                  ? [1.75, 0.28, 0.15]
+                  : [0, 0, 0]
 
   return (
     <Canvas camera={{ position: [0, 2.4, 15], fov: 45 }} dpr={[1, 2]}>
@@ -181,6 +186,8 @@ export function WorldScene() {
           <DatabaseCityContent />
         ) : sceneView === 'security-city' ? (
           <SecurityCityContent />
+        ) : sceneView === 'integration-city' ? (
+          <IntegrationCityContent />
         ) : (
           <WorldContent />
         )}

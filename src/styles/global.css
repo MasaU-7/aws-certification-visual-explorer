@@ -281,6 +281,10 @@ button:disabled {
   color: #e07a8a;
 }
 
+.city-sign--bus {
+  color: #e74a98;
+}
+
 .city-legend {
   position: absolute;
   left: 1.25rem;
@@ -478,6 +482,13 @@ button:disabled {
 .loc-chip--compliance,
 .loc-chip--classify {
   border-color: rgba(221, 52, 76, 0.55);
+}
+
+.loc-chip--fan-out,
+.loc-chip--queue,
+.loc-chip--orchestrate,
+.loc-chip--email {
+  border-color: rgba(231, 21, 123, 0.6);
 }
 
 .inspector__icon {

@@ -176,7 +176,12 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
   if (occupant.serviceId === 'datasync') chips.push('region', 'online')
   if (occupant.serviceId === 'storage-gateway') chips.push('on-prem', 'hybrid')
   if (occupant.serviceId === 'snowball') chips.push('on-prem', 'offline')
-  if (occupant.serviceId === 'sqs' && !occupant.az) chips.push('AWS', 'event')
+  if (occupant.serviceId === 'sqs' && !occupant.az) {
+    chips.push('AWS', sceneView === 'integration-city' ? 'queue' : 'event')
+  }
+  if (occupant.serviceId === 'sns') chips.push('AWS', 'fan-out')
+  if (occupant.serviceId === 'step-functions') chips.push('AWS', 'orchestrate')
+  if (occupant.serviceId === 'ses') chips.push('AWS', 'email')
   if (occupant.serviceId === 'cloudfront') chips.push('edge', 'PoP', 'cache')
   if (occupant.serviceId === 'global-accelerator') chips.push('edge', 'anycast')
   if (occupant.serviceId === 'waf' || occupant.serviceId === 'shield') chips.push('edge')
