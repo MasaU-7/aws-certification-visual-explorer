@@ -70,15 +70,6 @@ export const FLOW_COLORS: Record<CityFlowRole, string> = {
   event: '#E7157B',
 }
 
-/** Internet 越えの VPN 区間だけ破線（S2S / Client VPN）。IGW への公開入口は実線。 */
-export function isInternetVpnHop(from: string, to: string) {
-  return (
-    (from === 'onprem' && to === 'internet') ||
-    (from === 'internet' && to === 'vpn') ||
-    (from === 'internet' && to === 'client-vpn')
-  )
-}
-
 export function getOccupantPosition(occupant: CityOccupant): [number, number, number] {
   const fixed = FIXED_POSITIONS[occupant.id]
   if (fixed) return fixed

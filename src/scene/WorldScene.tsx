@@ -8,6 +8,7 @@ import { useExplorerStore } from '@/store/explorerStore'
 import { buildRelationshipGraph } from '@/scene/layout/relatedServices'
 import { CdnCityContent } from '@/scene/cdn/CdnCityContent'
 import { ComputeCityContent } from '@/scene/compute/ComputeCityContent'
+import { StorageCityContent } from '@/scene/storage/StorageCityContent'
 import { VpcCityContent } from '@/scene/vpc/VpcCityContent'
 import { CategoryOrb } from './nodes/CategoryOrb'
 import { GhostServiceNode } from './nodes/GhostServiceNode'
@@ -26,6 +27,8 @@ function SceneCamera() {
       camera.position.set(0.55, 9.4, 14.2)
     } else if (sceneView === 'cdn-city') {
       camera.position.set(0.35, 9.6, 14.6)
+    } else if (sceneView === 'storage-city') {
+      camera.position.set(-1.55, 9.6, 14.6)
     } else {
       camera.position.set(0, 2.4, 15)
     }
@@ -148,7 +151,9 @@ export function WorldScene() {
         ? [0.55, 0.28, 0.2]
         : sceneView === 'cdn-city'
           ? [0.35, 0.28, 0.55]
-          : [0, 0, 0]
+          : sceneView === 'storage-city'
+            ? [-1.55, 0.28, 0.25]
+            : [0, 0, 0]
 
   return (
     <Canvas camera={{ position: [0, 2.4, 15], fov: 45 }} dpr={[1, 2]}>
@@ -160,6 +165,8 @@ export function WorldScene() {
           <ComputeCityContent />
         ) : sceneView === 'cdn-city' ? (
           <CdnCityContent />
+        ) : sceneView === 'storage-city' ? (
+          <StorageCityContent />
         ) : (
           <WorldContent />
         )}

@@ -42,7 +42,6 @@ export function CdnCityContent() {
           }
           return new Set()
         }}
-        isDashed={(flow) => flow.id === 'cf-s3' || flow.id === 'cf-igw' || flow.id === 'cf-lambda'}
       />
       {cdnCity.occupants.map((occupant) => (
         <CityOccupantNode key={occupant.id} occupant={occupant} />

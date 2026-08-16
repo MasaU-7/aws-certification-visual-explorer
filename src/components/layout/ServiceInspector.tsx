@@ -144,8 +144,21 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
   if (occupant.id === 'batch' && !occupant.az) chips.push('AWS', 'scheduler')
   if (occupant.serviceId === 'ecs' && occupant.az) chips.push('task')
   if (occupant.serviceId === 's3' && !occupant.az) {
-    chips.push(sceneView === 'cdn-city' ? 'region' : 'AWS', sceneView === 'cdn-city' ? 'origin' : 'event')
+    chips.push(
+      ...(sceneView === 'cdn-city'
+        ? ['region', 'origin']
+        : sceneView === 'storage-city'
+          ? ['region', 'object']
+          : ['AWS', 'event']),
+    )
   }
+  if (occupant.serviceId === 'ebs') chips.push('block', 'same-AZ')
+  if (occupant.serviceId === 'efs') chips.push('NFS', 'multi-AZ')
+  if (occupant.serviceId === 'fsx') chips.push('file')
+  if (occupant.serviceId === 'transfer-family') chips.push('region', 'SFTP')
+  if (occupant.serviceId === 'datasync') chips.push('region', 'online')
+  if (occupant.serviceId === 'storage-gateway') chips.push('on-prem', 'hybrid')
+  if (occupant.serviceId === 'snowball') chips.push('on-prem', 'offline')
   if (occupant.serviceId === 'sqs' && !occupant.az) chips.push('AWS', 'event')
   if (occupant.serviceId === 'cloudfront') chips.push('edge', 'PoP', 'cache')
   if (occupant.serviceId === 'global-accelerator') chips.push('edge', 'anycast')
