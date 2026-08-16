@@ -38,8 +38,8 @@ export function AppShell() {
           {isCity ? (
             <>
               <p className="stage-caption__world">VPC City</p>
-              <p className="stage-caption__cert">AZ-a · AZ-b</p>
-              <p className="stage-caption__hint">Public · Private</p>
+              <p className="stage-caption__cert">Internet · AWS · On-prem</p>
+              <p className="stage-caption__hint">DX は専用 · VPN は Internet 経由</p>
               <button type="button" className="stage-caption__back" onClick={exitVpcCity}>
                 AWS World
               </button>

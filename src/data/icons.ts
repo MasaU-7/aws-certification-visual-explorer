@@ -71,6 +71,7 @@ import ArchitectureServiceAWSWAF from 'aws-react-icons/icons/ArchitectureService
 import ArchitectureServiceElasticLoadBalancing from 'aws-react-icons/icons/ArchitectureServiceElasticLoadBalancing'
 import ResourceAmazonVPCInternetGateway from 'aws-react-icons/icons/ResourceAmazonVPCInternetGateway'
 import ResourceAmazonVPCNATGateway from 'aws-react-icons/icons/ResourceAmazonVPCNATGateway'
+import ResourceAmazonVPCVPNGateway from 'aws-react-icons/icons/ResourceAmazonVPCVPNGateway'
 import ResourceAWSDirectConnectGateway from 'aws-react-icons/icons/ResourceAWSDirectConnectGateway'
 import type { ServiceCategory } from '@/types/aws'
 
@@ -108,6 +109,7 @@ export const serviceIcons: Record<string, AwsIcon> = {
   batch: ArchitectureServiceAWSBatch,
   'direct-connect': ArchitectureServiceAWSDirectConnect,
   'site-to-site-vpn': ArchitectureServiceAWSSitetoSiteVPN,
+  'vpn-gateway': ResourceAmazonVPCVPNGateway,
   'client-vpn': ArchitectureServiceAWSClientVPN,
   'direct-connect-gateway': ResourceAWSDirectConnectGateway,
   'transit-gateway': ArchitectureServiceAWSTransitGateway,

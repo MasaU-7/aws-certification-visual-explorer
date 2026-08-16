@@ -27,7 +27,7 @@ export const scenarios: ScenarioDefinition[] = [
     id: 'hybrid-network',
     title: 'オンプレと AWS をつなぐ',
     goal: 'DX / VPN / TGW の置き場所を見る',
-    requiredServices: ['direct-connect', 'site-to-site-vpn', 'transit-gateway', 'vpc'],
+    requiredServices: ['direct-connect', 'site-to-site-vpn', 'vpn-gateway', 'transit-gateway', 'vpc'],
     certifications: ['SAA-C03'],
   },
   {

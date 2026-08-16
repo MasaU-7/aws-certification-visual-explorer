@@ -1,1 +1,7 @@
-export { getCityOccupant, isVpcCityService, vpcCity } from './city'
+export {
+  getCityOccupant,
+  getPrimaryOccupantId,
+  isNetworkCityEntry,
+  isVpcCityService,
+  vpcCity,
+} from './city'

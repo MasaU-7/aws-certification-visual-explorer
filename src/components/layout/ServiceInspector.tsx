@@ -2,7 +2,7 @@ import { getCityOccupant } from '@/data/vpc'
 import { fixtureIcons, serviceIcons } from '@/data/icons'
 import { getServiceById } from '@/data/services'
 import { useExplorerStore } from '@/store/explorerStore'
-import type { AvailabilityZoneId, CityOccupantKind, SubnetTier } from '@/types/aws'
+import type { CityOccupant } from '@/types/aws'
 
 const AZ_LABEL = { 'az-a': 'AZ-a', 'az-b': 'AZ-b' } as const
 const TIER_LABEL = { public: 'Public', private: 'Private' } as const
@@ -37,14 +37,18 @@ export function ServiceInspector() {
               <Icon size={28} />
             </span>
           ) : (
-            <div className="inspector__swatch" style={{ background: '#9ED4FF' }} aria-hidden />
+            <div
+              className="inspector__swatch"
+              style={{ background: '#9ED4FF' }}
+              aria-hidden
+            />
           )}
           <h2>{occupant.label}</h2>
           <button type="button" className="inspector__close" onClick={close}>
             ×
           </button>
         </header>
-        <LocationSection az={occupant.az} tier={occupant.tier} kind={occupant.kind} />
+        <LocationSection occupant={occupant} />
       </aside>
     )
   }
@@ -73,7 +77,7 @@ export function ServiceInspector() {
         </button>
       </header>
 
-      {occupant && <LocationSection az={occupant.az} tier={occupant.tier} kind={occupant.kind} />}
+      {occupant && <LocationSection occupant={occupant} />}
 
       <section>
         <h3>つながる先</h3>
@@ -117,20 +121,21 @@ export function ServiceInspector() {
   )
 }
 
-function LocationSection({
-  az,
-  tier,
-  kind,
-}: {
-  az: AvailabilityZoneId | null
-  tier: SubnetTier | null
-  kind: CityOccupantKind
-}) {
+function LocationSection({ occupant }: { occupant: CityOccupant }) {
   const chips: string[] = []
-  if (kind === 'internet') chips.push('outside')
-  if (kind === 'igw') chips.push('edge')
-  if (az) chips.push(AZ_LABEL[az])
-  if (tier) chips.push(TIER_LABEL[tier])
+  if (occupant.kind === 'internet') chips.push('outside')
+  if (occupant.kind === 'igw') chips.push('AWS', 'edge')
+  if (occupant.kind === 'onprem') chips.push('on-prem')
+  if (occupant.serviceId === 'route53') chips.push('outside', 'dns')
+  if (occupant.serviceId === 'direct-connect') chips.push('DX location', 'dedicated')
+  if (occupant.serviceId === 'site-to-site-vpn') chips.push('over Internet')
+  if (occupant.serviceId === 'vpn-gateway') chips.push('AWS', 'VPC', 'edge')
+  if (occupant.serviceId === 'client-vpn') chips.push('AWS', 'VPC', 'over Internet')
+  if (occupant.serviceId === 'transit-gateway' || occupant.serviceId === 'direct-connect-gateway') {
+    chips.push('AWS')
+  }
+  if (occupant.az) chips.push(AZ_LABEL[occupant.az])
+  if (occupant.tier) chips.push(TIER_LABEL[occupant.tier])
   if (chips.length === 0) return null
 
   return (
@@ -139,7 +144,7 @@ function LocationSection({
       <ul className="chip-list">
         {chips.map((chip) => (
           <li key={chip}>
-            <span className={`rel-chip is-static loc-chip loc-chip--${chip.toLowerCase()}`}>{chip}</span>
+            <span className={`rel-chip is-static loc-chip loc-chip--${chip.toLowerCase().replace(/\s+/g, '-')}`}>{chip}</span>
           </li>
         ))}
       </ul>
