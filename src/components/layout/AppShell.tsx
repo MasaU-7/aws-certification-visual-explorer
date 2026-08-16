@@ -14,6 +14,7 @@ export function AppShell() {
   const cert = certifications.find((c) => c.id === certificationId)
   const isCity = isCityView(sceneView)
   const isCompute = sceneView === 'compute-city'
+  const isCdn = sceneView === 'cdn-city'
 
   useEffect(() => {
     if (!isCity) return
@@ -42,6 +43,15 @@ export function AppShell() {
               <p className="stage-caption__world">Compute City</p>
               <p className="stage-caption__cert">VPC 内 · Managed</p>
               <p className="stage-caption__hint">Lambda は既定で VPC 外</p>
+              <button type="button" className="stage-caption__back" onClick={exitCity}>
+                AWS World
+              </button>
+            </>
+          ) : isCdn ? (
+            <>
+              <p className="stage-caption__world">CDN / Edge City</p>
+              <p className="stage-caption__cert">Edge · Region origin</p>
+              <p className="stage-caption__hint">CF はキャッシュ · GA は Anycast</p>
               <button type="button" className="stage-caption__back" onClick={exitCity}>
                 AWS World
               </button>

@@ -47,12 +47,12 @@ function svc(
  */
 export const services: AwsService[] = [
   svc('ec2', 'EC2', 'compute', 'server', 'instance', ['compute', 'instance', 'ami', 'scaling'], ['vpc', 'ebs', 'elb', 'autoscaling', 'iam', 'ecs', 'systems-manager'], ['web-application', 'auto-scaling', 'high-availability']),
-  svc('lambda', 'Lambda', 'compute', 'function', 'function', ['compute', 'event', 'serverless'], ['s3', 'dynamodb', 'sqs', 'sns', 'iam', 'step-functions', 'kinesis'], ['event-driven']),
+  svc('lambda', 'Lambda', 'compute', 'function', 'function', ['compute', 'event', 'serverless', 'lambda-at-edge'], ['s3', 'dynamodb', 'sqs', 'sns', 'iam', 'step-functions', 'kinesis', 'cloudfront'], ['event-driven', 'edge-performance']),
   svc('autoscaling', 'Auto Scaling', 'compute', 'scale', 'group', ['scaling', 'elasticity', 'availability'], ['ec2', 'elb', 'cloudwatch'], ['auto-scaling', 'web-application']),
   svc('ecs', 'ECS', 'compute', 'server', 'container', ['compute', 'container', 'orchestration'], ['ec2', 'elb', 'iam', 'efs', 'step-functions'], ['web-application']),
   svc('batch', 'Batch', 'compute', 'server', 'batch', ['compute', 'batch', 'queue'], ['ecs', 'ec2', 's3', 'iam', 'step-functions'], ['event-driven']),
 
-  svc('elb', 'ELB / ALB', 'network', 'network', 'balancer', ['load-balancing', 'availability'], ['ec2', 'autoscaling', 'vpc', 'route53', 'waf', 'acm', 'global-accelerator'], ['web-application', 'high-availability']),
+  svc('elb', 'ELB / ALB', 'network', 'network', 'balancer', ['load-balancing', 'availability', 'nlb'], ['ec2', 'autoscaling', 'vpc', 'route53', 'waf', 'acm', 'global-accelerator'], ['web-application', 'high-availability', 'edge-performance']),
   svc('vpc', 'VPC', 'network', 'network', 'city', ['network', 'isolation', 'subnet', 'routing'], ['ec2', 'rds', 'elb', 'direct-connect', 'site-to-site-vpn', 'vpn-gateway', 'transit-gateway', 'client-vpn'], ['web-application', 'high-availability', 'hybrid-network']),
   svc('route53', 'Route 53', 'network', 'edge', 'dns', ['dns', 'routing', 'failover'], ['cloudfront', 'elb', 's3', 'global-accelerator'], ['web-application', 'edge-performance']),
   svc('direct-connect', 'Direct Connect', 'network', 'network', 'dx', ['hybrid', 'dedicated', 'private'], ['vpc', 'direct-connect-gateway', 'transit-gateway', 'vpn-gateway', 'site-to-site-vpn'], ['hybrid-network']),
@@ -62,8 +62,8 @@ export const services: AwsService[] = [
   svc('direct-connect-gateway', 'Direct Connect GW', 'network', 'network', 'dxgw', ['hybrid', 'multi-region', 'multi-account'], ['direct-connect', 'vpn-gateway', 'transit-gateway', 'vpc'], ['hybrid-network']),
   svc('transit-gateway', 'Transit Gateway', 'network', 'network', 'tgw', ['hub-spoke', 'transit', 'peering'], ['vpc', 'direct-connect', 'direct-connect-gateway'], ['hybrid-network']),
 
-  svc('cloudfront', 'CloudFront', 'cdn', 'edge', 'cdn', ['cdn', 'edge', 'caching'], ['s3', 'elb', 'route53', 'acm', 'waf', 'shield', 'global-accelerator'], ['web-application', 'static-site', 'edge-performance']),
-  svc('global-accelerator', 'Global Accelerator', 'cdn', 'edge', 'anycast', ['anycast', 'static-ip', 'failover'], ['route53', 'elb', 'cloudfront'], ['edge-performance']),
+  svc('cloudfront', 'CloudFront', 'cdn', 'edge', 'cdn', ['cdn', 'edge', 'caching', 'lambda-at-edge'], ['s3', 'elb', 'lambda', 'route53', 'acm', 'waf', 'shield', 'global-accelerator'], ['web-application', 'static-site', 'edge-performance']),
+  svc('global-accelerator', 'Global Accelerator', 'cdn', 'edge', 'anycast', ['anycast', 'static-ip', 'failover', 'nlb'], ['route53', 'elb', 'cloudfront'], ['edge-performance']),
 
   svc('s3', 'S3', 'storage', 'bucket', 'bucket', ['object-storage', 'durability', 'static-hosting'], ['cloudfront', 'lambda', 'iam', 'storage-gateway', 'macie', 'athena', 'datasync'], ['web-application', 'static-site', 'storage-choice']),
   svc('ebs', 'EBS', 'storage', 'bucket', 'block', ['block-storage', 'az-scope', 'snapshot'], ['ec2', 'rds'], ['storage-choice']),

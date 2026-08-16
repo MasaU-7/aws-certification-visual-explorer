@@ -260,6 +260,15 @@ button:disabled {
   color: #ed9a4a;
 }
 
+.city-sign--edge {
+  color: #c4b0ff;
+  font-size: 13px;
+}
+
+.city-sign--origin {
+  color: #9ec85a;
+}
+
 .loc-chip--public {
   border-color: rgba(63, 163, 106, 0.55);
 }
@@ -308,6 +317,25 @@ button:disabled {
 .loc-chip--event,
 .loc-chip--metrics {
   border-color: rgba(237, 113, 0, 0.55);
+}
+
+.loc-chip--edge,
+.loc-chip--pop,
+.loc-chip--cache,
+.loc-chip--anycast {
+  border-color: rgba(167, 139, 250, 0.65);
+}
+
+.loc-chip--origin,
+.loc-chip--region,
+.loc-chip--tls {
+  border-color: rgba(122, 161, 22, 0.6);
+}
+
+.loc-chip--l4,
+.loc-chip--l7,
+.loc-chip--lambda@edge {
+  border-color: rgba(167, 139, 250, 0.65);
 }
 
 .inspector__icon {
