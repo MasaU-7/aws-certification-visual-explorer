@@ -1,10 +1,8 @@
 import { getActiveOccupant, isCityView } from '@/data/cities'
 import { fixtureIcons, serviceIcons } from '@/data/icons'
 import { getServiceById } from '@/data/services'
+import { AZ_LABEL, type CityOccupant } from '@/types/aws'
 import { useExplorerStore } from '@/store/explorerStore'
-import type { CityOccupant } from '@/types/aws'
-
-const AZ_LABEL = { 'az-a': 'AZ-a', 'az-b': 'AZ-b' } as const
 const TIER_LABEL = { public: 'Public', private: 'Private' } as const
 
 export function ServiceInspector() {
@@ -162,13 +160,16 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
                   : ['AWS', 'event']),
     )
   }
-  if (occupant.serviceId === 'rds') chips.push('RDB', 'multi-AZ')
-  if (occupant.serviceId === 'aurora') chips.push('cluster', 'multi-AZ')
-  if (occupant.serviceId === 'elasticache') chips.push('cache', 'in VPC')
-  if (occupant.serviceId === 'memorydb') chips.push('durable', 'in VPC')
+  if (occupant.serviceId === 'rds') {
+    chips.push('RDB')
+    if (sceneView === 'database-city' || sceneView === 'network-city') chips.push('multi-AZ')
+  }
+  if (occupant.serviceId === 'aurora') chips.push('cluster', '3-AZ')
+  if (occupant.serviceId === 'elasticache') chips.push('cache', 'multi-AZ')
+  if (occupant.serviceId === 'memorydb') chips.push('durable', 'multi-AZ')
   if (occupant.serviceId === 'redshift') chips.push('warehouse', 'in VPC')
-  if (occupant.serviceId === 'neptune') chips.push('graph', 'in VPC')
-  if (occupant.serviceId === 'documentdb') chips.push('document', 'in VPC')
+  if (occupant.serviceId === 'neptune') chips.push('graph', 'multi-AZ')
+  if (occupant.serviceId === 'documentdb') chips.push('document', 'multi-AZ')
   if (occupant.serviceId === 'keyspaces') chips.push('AWS', 'serverless', 'cassandra')
   if (occupant.serviceId === 'timestream') chips.push('AWS', 'serverless', 'timeseries')
   if (occupant.serviceId === 'kinesis') chips.push('AWS', 'stream')
@@ -178,7 +179,7 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
   if (occupant.serviceId === 'quicksight') chips.push('AWS', 'BI')
   if (occupant.serviceId === 'ebs') chips.push('block', 'same-AZ')
   if (occupant.serviceId === 'efs') chips.push('NFS', 'multi-AZ')
-  if (occupant.serviceId === 'fsx') chips.push('file')
+  if (occupant.serviceId === 'fsx') chips.push('file', 'multi-AZ')
   if (occupant.serviceId === 'transfer-family') chips.push('region', 'SFTP')
   if (occupant.serviceId === 'datasync') chips.push('region', 'online')
   if (occupant.serviceId === 'storage-gateway') chips.push('on-prem', 'hybrid')
@@ -190,7 +191,7 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
   if (occupant.serviceId === 'step-functions') chips.push('AWS', 'orchestrate')
   if (occupant.serviceId === 'ses') chips.push('AWS', 'email')
   if (occupant.serviceId === 'cloudfront') chips.push('edge', 'PoP', 'cache')
-  if (occupant.serviceId === 'global-accelerator') chips.push('edge', 'anycast')
+  if (occupant.serviceId === 'global-accelerator') chips.push('edge', 'anycast', 'multi-region')
   if (occupant.serviceId === 'waf' || occupant.serviceId === 'shield') chips.push('edge')
   if (occupant.serviceId === 'acm') chips.push('edge', 'tls')
   if (occupant.serviceId === 'iam') chips.push('AWS', 'account')
@@ -212,8 +213,9 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
   if (occupant.serviceId === 'cost-explorer') chips.push('AWS', 'cost')
   if (occupant.serviceId === 'budgets') chips.push('AWS', 'threshold')
   if (occupant.serviceId === 'elb' && sceneView === 'cdn-city') {
-    chips.push('origin', occupant.id.startsWith('nlb') ? 'L4' : 'L7')
+    chips.push(occupant.id === 'nlb-r2' ? 'Region B' : 'Region A', occupant.id.startsWith('nlb') ? 'L4' : 'L7')
   }
+  if (occupant.id === 'ec2-r2') chips.push('Region B')
   if (occupant.serviceId === 'route53') chips.push('outside', 'dns')
   if (occupant.serviceId === 'direct-connect') chips.push('DX location', 'dedicated')
   if (occupant.serviceId === 'site-to-site-vpn') chips.push('over Internet')

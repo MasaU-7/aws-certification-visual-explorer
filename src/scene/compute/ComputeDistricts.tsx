@@ -1,4 +1,5 @@
 import { Edges, Html } from '@react-three/drei'
+import { computeCity } from '@/data/compute'
 import {
   COMPUTE_AWS_CENTER,
   COMPUTE_AWS_SIZE,
@@ -17,7 +18,7 @@ import {
   PUBLIC_COLOR,
   VPC_COLOR,
 } from '@/scene/vpc/cityLayout'
-import type { AvailabilityZoneId, SubnetTier } from '@/types/aws'
+import { AZ_LABEL, type AvailabilityZoneId, type SubnetTier } from '@/types/aws'
 
 function SubnetSlab({ az, tier }: { az: AvailabilityZoneId; tier: SubnetTier }) {
   const color = tier === 'public' ? PUBLIC_COLOR : PRIVATE_COLOR
@@ -52,7 +53,7 @@ function AzDistrict({ az }: { az: AvailabilityZoneId }) {
         <Edges color={AZ_COLOR} threshold={15} />
       </mesh>
       <Html position={[0, COMPUTE_AZ_SIZE[1] / 2 + 0.15, 0]} center distanceFactor={12} style={{ pointerEvents: 'none' }}>
-        <div className="city-sign city-sign--az">{az === 'az-a' ? 'AZ-a' : 'AZ-b'}</div>
+        <div className="city-sign city-sign--az">{AZ_LABEL[az]}</div>
       </Html>
     </group>
   )
@@ -90,12 +91,15 @@ export function ComputeDistricts() {
         <div className="city-sign city-sign--private">Private</div>
       </Html>
 
-      <AzDistrict az="az-a" />
-      <AzDistrict az="az-b" />
-      <SubnetSlab az="az-a" tier="public" />
-      <SubnetSlab az="az-b" tier="public" />
-      <SubnetSlab az="az-a" tier="private" />
-      <SubnetSlab az="az-b" tier="private" />
+      {computeCity.azs.map((az) => (
+        <AzDistrict key={az} az={az} />
+      ))}
+      {computeCity.azs.map((az) => (
+        <SubnetSlab key={`${az}-public`} az={az} tier="public" />
+      ))}
+      {computeCity.azs.map((az) => (
+        <SubnetSlab key={`${az}-private`} az={az} tier="private" />
+      ))}
 
       <mesh position={MANAGED_CENTER}>
         <boxGeometry args={MANAGED_SIZE} />

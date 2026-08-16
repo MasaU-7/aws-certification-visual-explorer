@@ -14,7 +14,7 @@ const STORAGE_CITY_SERVICES = new Set([
 
 /**
  * SAA の Storage を 1 画面に置く。
- * EBS は同一 AZ の EC2 にアタッチ。EFS / FSx は VPC 内でマウント。
+ * EBS は同一 AZ のみ。EFS / FSx はマウントターゲットが各 AZ にあり、中身は AZ をまたぐ。
  * S3 は Region（VPC 外）。Private の EC2 は NAT 経由で届く。
  * Transfer は Internet から S3 / EFS へ。DataSync はオンライン同期。
  * Storage Gateway は On-prem から S3。Snowball はオフライン搬入。
@@ -30,7 +30,6 @@ export const storageCity: VpcCityDefinition = {
     { id: 'ec2-a', kind: 'service', label: 'EC2', az: 'az-a', tier: 'private', serviceId: 'ec2' },
     { id: 'ec2-b', kind: 'service', label: 'EC2', az: 'az-b', tier: 'private', serviceId: 'ec2' },
     { id: 'ebs-a', kind: 'service', label: 'EBS', az: 'az-a', tier: 'private', serviceId: 'ebs' },
-    { id: 'ebs-b', kind: 'service', label: 'EBS', az: 'az-b', tier: 'private', serviceId: 'ebs' },
     { id: 'efs-a', kind: 'service', label: 'EFS', az: 'az-a', tier: 'private', serviceId: 'efs' },
     { id: 'efs-b', kind: 'service', label: 'EFS', az: 'az-b', tier: 'private', serviceId: 'efs' },
     { id: 'fsx-a', kind: 'service', label: 'FSx', az: 'az-a', tier: 'private', serviceId: 'fsx' },
@@ -48,13 +47,13 @@ export const storageCity: VpcCityDefinition = {
     L('sftp-s3', 'transfer', 's3', 'data'),
     L('sftp-efs', 'transfer', 'efs-a', 'data'),
     L('ebs-a', 'ebs-a', 'ec2-a', 'data', 'attach', 'none'),
-    L('ebs-b', 'ebs-b', 'ec2-b', 'data', 'attach', 'none'),
     L('efs-a', 'efs-a', 'ec2-a', 'data', 'attach', 'none'),
     L('efs-b', 'efs-b', 'ec2-b', 'data', 'attach', 'none'),
+    L('efs-ha', 'efs-a', 'efs-b', 'data', 'path', 'both'),
     L('fsx-a', 'fsx-a', 'ec2-a', 'data', 'attach', 'none'),
     L('fsx-b', 'fsx-b', 'ec2-b', 'data', 'attach', 'none'),
+    L('fsx-ha', 'fsx-a', 'fsx-b', 'data', 'path', 'both'),
     L('ec2-s3-a', 'ec2-a', 's3', 'data', 'access'),
-    L('ec2-s3-b', 'ec2-b', 's3', 'data', 'access'),
     L('out-a', 'ec2-a', 'nat-a', 'egress'),
     L('out-b', 'ec2-b', 'nat-b', 'egress'),
     L('out-igw-a', 'nat-a', 'igw', 'egress'),

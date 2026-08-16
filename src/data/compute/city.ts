@@ -8,7 +8,7 @@ const COMPUTE_CITY_SERVICES = new Set(['ec2', 'lambda', 'autoscaling', 'ecs', 'b
  * EC2 / ECS / Batch ワーカーは VPC 内。
  * Auto Scaling は ALB 配下の EC2 を増減（きっかけは CloudWatch）。
  * Lambda は既定で VPC 外。Private に置くと VPC 内の相手へ届く。
- * Batch は EC2 でも ECS でも走らせ、成果は S3。
+ * Batch ワーカーは 1 AZ。AZ 横断は Batch の強みではない。
  */
 export const computeCity: VpcCityDefinition = {
   id: 'saa-compute-city',
@@ -32,7 +32,6 @@ export const computeCity: VpcCityDefinition = {
     { id: 'ecs-a', kind: 'service', label: 'ECS', az: 'az-a', tier: 'private', serviceId: 'ecs' },
     { id: 'ecs-b', kind: 'service', label: 'ECS', az: 'az-b', tier: 'private', serviceId: 'ecs' },
     { id: 'batch-a', kind: 'service', label: 'Batch', az: 'az-a', tier: 'private', serviceId: 'batch' },
-    { id: 'batch-b', kind: 'service', label: 'Batch', az: 'az-b', tier: 'private', serviceId: 'batch' },
     { id: 'lambda-vpc', kind: 'service', label: 'Lambda', az: 'az-a', tier: 'private', serviceId: 'lambda' },
   ],
   flows: [
@@ -44,7 +43,6 @@ export const computeCity: VpcCityDefinition = {
     L('app-ecs-a', 'alb-a', 'ecs-a', 'app'),
     L('app-ecs-b', 'alb-b', 'ecs-b', 'app'),
     L('app-lambda-a', 'alb-a', 'lambda', 'app'),
-    L('app-lambda-b', 'alb-b', 'lambda', 'app'),
     L('cw-scale', 'cloudwatch', 'asg', 'scale', 'access'),
     L('scale-alb-a', 'asg', 'alb-a', 'scale', 'attach', 'none'),
     L('scale-alb-b', 'asg', 'alb-b', 'scale', 'attach', 'none'),
@@ -53,13 +51,9 @@ export const computeCity: VpcCityDefinition = {
     L('ecs-on-a', 'ecs-a', 'ec2-a', 'app', 'attach', 'none'),
     L('ecs-on-b', 'ecs-b', 'ec2-b', 'app', 'attach', 'none'),
     L('batch-launch-a', 'batch', 'batch-a', 'scale'),
-    L('batch-launch-b', 'batch', 'batch-b', 'scale'),
     L('batch-ec2-a', 'batch-a', 'ec2-a', 'app', 'attach', 'none'),
-    L('batch-ec2-b', 'batch-b', 'ec2-b', 'app', 'attach', 'none'),
     L('batch-ecs-a', 'batch-a', 'ecs-a', 'app', 'attach', 'none'),
-    L('batch-ecs-b', 'batch-b', 'ecs-b', 'app', 'attach', 'none'),
     L('batch-s3-a', 'batch-a', 's3', 'data', 'access'),
-    L('batch-s3-b', 'batch-b', 's3', 'data', 'access'),
     L('event-s3', 's3', 'lambda', 'event'),
     L('event-sqs', 'sqs', 'lambda', 'event'),
     L('event-cw', 'cloudwatch', 'lambda', 'event'),
@@ -70,7 +64,6 @@ export const computeCity: VpcCityDefinition = {
     L('out-ecs-a', 'ecs-a', 'nat-a', 'egress'),
     L('out-ecs-b', 'ecs-b', 'nat-b', 'egress'),
     L('out-batch-a', 'batch-a', 'nat-a', 'egress'),
-    L('out-batch-b', 'batch-b', 'nat-b', 'egress'),
     L('out-lambda-vpc', 'lambda-vpc', 'nat-a', 'egress'),
     L('out-igw-a', 'nat-a', 'igw', 'egress'),
     L('out-igw-b', 'nat-b', 'igw', 'egress'),

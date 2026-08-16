@@ -11,6 +11,7 @@ export const ONPREM_COLOR = '#8A93A6'
 const AZ_X: Record<AvailabilityZoneId, number> = {
   'az-a': -2.15,
   'az-b': 2.15,
+  'az-c': 0,
 }
 
 const TIER_Z: Record<SubnetTier, number> = {

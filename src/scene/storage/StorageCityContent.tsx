@@ -5,8 +5,10 @@ import { CityEdges } from '@/scene/vpc/CityEdges'
 import { CityOccupantNode } from '@/scene/vpc/CityOccupantNode'
 import { useExplorerStore } from '@/store/explorerStore'
 
-const S3_INBOUND = new Set(['sftp-s3', 'sgw-s3', 'sync-s3', 'snow-s3', 'ec2-s3-a', 'ec2-s3-b'])
+const S3_INBOUND = new Set(['sftp-s3', 'sgw-s3', 'sync-s3', 'snow-s3', 'ec2-s3-a'])
 const HYBRID_IN = new Set(['site-sgw', 'sgw-s3', 'site-sync', 'sync-s3', 'sync-efs', 'sync-fsx', 'site-snow', 'snow-s3'])
+const EFS_SPAN = new Set(['efs-a', 'efs-b', 'efs-ha'])
+const FSX_SPAN = new Set(['fsx-a', 'fsx-b', 'fsx-ha'])
 
 export function StorageCityContent() {
   const selectOccupant = useExplorerStore((s) => s.selectOccupant)
@@ -26,6 +28,8 @@ export function StorageCityContent() {
         hubServiceId={null}
         extraLinkedFlowIds={(occupantId, serviceId) => {
           if (occupantId === 's3' || serviceId === 's3') return S3_INBOUND
+          if (serviceId === 'efs' || occupantId === 'efs-a' || occupantId === 'efs-b') return EFS_SPAN
+          if (serviceId === 'fsx' || occupantId === 'fsx-a' || occupantId === 'fsx-b') return FSX_SPAN
           if (
             occupantId === 'onprem' ||
             occupantId === 'sgw' ||

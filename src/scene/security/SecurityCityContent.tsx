@@ -11,9 +11,7 @@ const EDGE_CHAIN = new Set([
   'shield-cf',
   'acm-cf',
   'waf-alb-a',
-  'waf-alb-b',
   'acm-alb-a',
-  'acm-alb-b',
   'fms-waf',
   'fms-shield',
 ])
@@ -23,26 +21,14 @@ const IDENTITY_CHAIN = new Set([
   'org-fms',
   'sso-iam',
   'sso-ds-a',
-  'sso-ds-b',
-  'ds-ha',
   'iam-kms',
   'iam-secrets',
 ])
-const CRYPTO_CHAIN = new Set([
-  'iam-kms',
-  'kms-hsm-a',
-  'kms-hsm-b',
-  'hsm-ha',
-  'secrets-kms',
-  'secrets-rds-a',
-  'secrets-rds-b',
-  'rds-ha',
-])
+const CRYPTO_CHAIN = new Set(['iam-kms', 'kms-hsm-a', 'secrets-kms', 'secrets-rds-a'])
 const DETECT_CHAIN = new Set([
   'trail-gd',
   's3-macie',
   'insp-ec2-a',
-  'insp-ec2-b',
   'gd-hub',
   'insp-hub',
   'macie-hub',

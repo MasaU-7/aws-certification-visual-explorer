@@ -1,4 +1,5 @@
 import { Edges, Html } from '@react-three/drei'
+import { securityCity } from '@/data/security'
 import {
   DETECT_CENTER,
   DETECT_SIZE,
@@ -21,7 +22,7 @@ import {
   PUBLIC_COLOR,
   VPC_COLOR,
 } from '@/scene/vpc/cityLayout'
-import type { AvailabilityZoneId, SubnetTier } from '@/types/aws'
+import { AZ_LABEL, type AvailabilityZoneId, type SubnetTier } from '@/types/aws'
 
 const IDENTITY_COLOR = '#DD344C'
 const DETECT_COLOR = '#E07A8A'
@@ -60,7 +61,7 @@ function AzDistrict({ az }: { az: AvailabilityZoneId }) {
         <Edges color={AZ_COLOR} threshold={15} />
       </mesh>
       <Html position={[0, SECURITY_AZ_SIZE[1] / 2 + 0.15, 0]} center distanceFactor={12} style={{ pointerEvents: 'none' }}>
-        <div className="city-sign city-sign--az">{az === 'az-a' ? 'AZ-a' : 'AZ-b'}</div>
+        <div className="city-sign city-sign--az">{AZ_LABEL[az]}</div>
       </Html>
     </group>
   )
@@ -112,12 +113,15 @@ export function SecurityDistricts() {
         <div className="city-sign city-sign--edge">Edge</div>
       </Html>
 
-      <AzDistrict az="az-a" />
-      <AzDistrict az="az-b" />
-      <SubnetSlab az="az-a" tier="public" />
-      <SubnetSlab az="az-b" tier="public" />
-      <SubnetSlab az="az-a" tier="private" />
-      <SubnetSlab az="az-b" tier="private" />
+      {securityCity.azs.map((az) => (
+        <AzDistrict key={az} az={az} />
+      ))}
+      {securityCity.azs.map((az) => (
+        <SubnetSlab key={`${az}-public`} az={az} tier="public" />
+      ))}
+      {securityCity.azs.map((az) => (
+        <SubnetSlab key={`${az}-private`} az={az} tier="private" />
+      ))}
 
       <mesh position={IDENTITY_CENTER}>
         <boxGeometry args={IDENTITY_SIZE} />

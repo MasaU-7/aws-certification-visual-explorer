@@ -5,7 +5,7 @@ import { CityOccupantNode } from '@/scene/vpc/CityOccupantNode'
 import { getOccupantPosition } from '@/scene/vpc/cityLayout'
 import { useExplorerStore } from '@/store/explorerStore'
 
-const VPN_TUNNEL_FLOWS = new Set(['vpn-over-net', 'vpn-in', 'vpn-vgw', 'vgw-a', 'vgw-b'])
+const VPN_TUNNEL_FLOWS = new Set(['vpn-over-net', 'vpn-in', 'vpn-vgw', 'vgw-a'])
 
 export function VpcCityContent() {
   const selectOccupant = useExplorerStore((s) => s.selectOccupant)

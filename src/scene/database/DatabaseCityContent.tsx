@@ -5,9 +5,9 @@ import { CityEdges } from '@/scene/vpc/CityEdges'
 import { CityOccupantNode } from '@/scene/vpc/CityOccupantNode'
 import { useExplorerStore } from '@/store/explorerStore'
 
-const RDS_CHAIN = new Set(['aurora-rds', 'cache-rds-a', 'cache-rds-b', 'rds-ha'])
-const CACHE_CHAIN = new Set(['mem-cache', 'cache-rds-a', 'cache-rds-b', 'cache-ha'])
-const REDSHIFT_CHAIN = new Set(['s3-rs-a', 's3-rs-b', 'rs-qs-a', 'rs-qs-b', 'rs-ha'])
+const RDS_CHAIN = new Set(['aurora-rds', 'cache-rds-a', 'rds-ha', 'aurora-ab', 'aurora-bc', 'aurora-ca'])
+const CACHE_CHAIN = new Set(['mem-cache', 'cache-rds-a', 'cache-ha'])
+const REDSHIFT_CHAIN = new Set(['s3-rs-a', 'rs-qs-a'])
 const SERVERLESS_CHAIN = new Set([
   'lambda-ddb',
   'lambda-ks',
@@ -15,9 +15,7 @@ const SERVERLESS_CHAIN = new Set([
   'kinesis-lambda',
   'kinesis-ts',
   'ec2-ddb-a',
-  'ec2-ddb-b',
   'ec2-ks-a',
-  'ec2-ks-b',
 ])
 
 export function DatabaseCityContent() {
@@ -37,7 +35,15 @@ export function DatabaseCityContent() {
         getPosition={getDatabaseOccupantPosition}
         hubServiceId={null}
         extraLinkedFlowIds={(occupantId, serviceId) => {
-          if (occupantId === 'rds-a' || occupantId === 'rds-b' || serviceId === 'rds' || serviceId === 'aurora') {
+          if (
+            occupantId === 'rds-a' ||
+            occupantId === 'rds-b' ||
+            occupantId === 'aurora-a' ||
+            occupantId === 'aurora-b' ||
+            occupantId === 'aurora-c' ||
+            serviceId === 'rds' ||
+            serviceId === 'aurora'
+          ) {
             return RDS_CHAIN
           }
           if (
@@ -50,7 +56,7 @@ export function DatabaseCityContent() {
           ) {
             return CACHE_CHAIN
           }
-          if (occupantId === 'rs-a' || occupantId === 'rs-b' || serviceId === 'redshift' || serviceId === 's3' || occupantId === 's3') {
+          if (occupantId === 'rs-a' || serviceId === 'redshift' || serviceId === 's3' || occupantId === 's3') {
             return REDSHIFT_CHAIN
           }
           if (

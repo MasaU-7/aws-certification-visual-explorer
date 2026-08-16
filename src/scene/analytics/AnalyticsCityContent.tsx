@@ -5,19 +5,10 @@ import { CityEdges } from '@/scene/vpc/CityEdges'
 import { CityOccupantNode } from '@/scene/vpc/CityOccupantNode'
 import { useExplorerStore } from '@/store/explorerStore'
 
-const STREAM_CHAIN = new Set(['pub-a', 'pub-b', 'kin-lambda', 'kin-emr', 'kin-s3', 'kin-ts', 'lambda-s3'])
-const EMR_CHAIN = new Set([
-  'kin-emr',
-  'emr-launch-a',
-  'emr-launch-b',
-  'emr-on-a',
-  'emr-on-b',
-  'emr-ha',
-  'emr-s3-a',
-  'emr-s3-b',
-])
-const LAKE_CHAIN = new Set(['kin-s3', 'lambda-s3', 'emr-s3-a', 'emr-s3-b', 'athena-s3', 's3-rs-a', 's3-rs-b'])
-const BI_CHAIN = new Set(['qs-in', 'athena-qs', 'rs-qs-a', 'rs-qs-b', 'rds-qs-a', 'rds-qs-b', 'athena-s3'])
+const STREAM_CHAIN = new Set(['pub-a', 'kin-lambda', 'kin-emr', 'kin-s3', 'kin-ts', 'lambda-s3'])
+const EMR_CHAIN = new Set(['kin-emr', 'emr-launch-a', 'emr-on-a', 'emr-s3-a'])
+const LAKE_CHAIN = new Set(['kin-s3', 'lambda-s3', 'emr-s3-a', 'athena-s3', 's3-rs-a'])
+const BI_CHAIN = new Set(['qs-in', 'athena-qs', 'rs-qs-a', 'rds-qs-a', 'athena-s3'])
 
 export function AnalyticsCityContent() {
   const selectOccupant = useExplorerStore((s) => s.selectOccupant)
@@ -37,7 +28,7 @@ export function AnalyticsCityContent() {
         hubServiceId={null}
         extraLinkedFlowIds={(occupantId, serviceId) => {
           if (occupantId === 'kinesis' || serviceId === 'kinesis') return STREAM_CHAIN
-          if (occupantId === 'emr' || occupantId === 'emr-a' || occupantId === 'emr-b' || serviceId === 'emr') {
+          if (occupantId === 'emr' || occupantId === 'emr-a' || serviceId === 'emr') {
             return EMR_CHAIN
           }
           if (occupantId === 's3' || serviceId === 's3' || occupantId === 'athena' || serviceId === 'athena') {

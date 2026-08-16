@@ -1,8 +1,9 @@
 import type { AvailabilityZoneId, CityOccupant, SubnetTier } from '@/types/aws'
 
 const AZ_X: Record<AvailabilityZoneId, number> = {
-  'az-a': -2.45,
-  'az-b': 2.45,
+  'az-a': 0,
+  'az-b': 0,
+  'az-c': 0,
 }
 
 const TIER_Z: Record<SubnetTier, number> = {
@@ -12,12 +13,12 @@ const TIER_Z: Record<SubnetTier, number> = {
 
 export const SECURITY_SUBNET_SIZE: [number, number, number] = [4.55, 0.06, 2.82]
 export const SECURITY_AZ_SIZE: [number, number, number] = [4.75, 1.55, 5.95]
-export const SECURITY_VPC_SIZE: [number, number, number] = [9.9, 1.75, 6.45]
-export const SECURITY_AWS_SIZE: [number, number, number] = [21.4, 2.08, 8.35]
-export const SECURITY_AWS_CENTER: [number, number, number] = [-0.15, 0.74, 0.22]
-export const IDENTITY_CENTER: [number, number, number] = [-8.35, 0.72, 0.15]
+export const SECURITY_VPC_SIZE: [number, number, number] = [5.25, 1.75, 6.45]
+export const SECURITY_AWS_SIZE: [number, number, number] = [16.4, 2.08, 8.35]
+export const SECURITY_AWS_CENTER: [number, number, number] = [0, 0.74, 0.22]
+export const IDENTITY_CENTER: [number, number, number] = [-6.15, 0.72, 0.15]
 export const IDENTITY_SIZE: [number, number, number] = [4.15, 1.35, 6.05]
-export const DETECT_CENTER: [number, number, number] = [8.05, 0.72, 0.25]
+export const DETECT_CENTER: [number, number, number] = [6.15, 0.72, 0.25]
 export const DETECT_SIZE: [number, number, number] = [4.55, 1.35, 6.25]
 export const EDGE_CENTER: [number, number, number] = [0, 0.92, 4.72]
 export const EDGE_SIZE: [number, number, number] = [4.85, 1.15, 2.15]
@@ -48,19 +49,19 @@ const FIXED_POSITIONS: Record<string, [number, number, number]> = {
   acm: [1.55, 1.15, 5.15],
   cloudfront: [0, 1.15, 4.05],
   igw: [0, 0.55, 3.45],
-  organizations: [-8.95, 1.15, 2.35],
-  iam: [-7.55, 1.15, 2.35],
-  'identity-center': [-8.95, 1.15, 0.75],
-  fms: [-7.55, 1.15, 0.75],
-  kms: [-8.95, 1.15, -0.85],
-  secrets: [-7.55, 1.15, -0.85],
-  'security-hub': [8.05, 1.15, 2.55],
-  guardduty: [7.05, 1.15, 1.05],
-  inspector: [9.05, 1.15, 1.05],
-  macie: [7.05, 1.15, -0.35],
-  config: [9.05, 1.15, -0.35],
-  cloudtrail: [7.05, 1.15, -1.75],
-  s3: [9.05, 1.15, -1.75],
+  organizations: [-6.75, 1.15, 2.35],
+  iam: [-5.35, 1.15, 2.35],
+  'identity-center': [-6.75, 1.15, 0.75],
+  fms: [-5.35, 1.15, 0.75],
+  kms: [-6.75, 1.15, -0.85],
+  secrets: [-5.35, 1.15, -0.85],
+  'security-hub': [6.15, 1.15, 2.55],
+  guardduty: [5.15, 1.15, 1.05],
+  inspector: [7.15, 1.15, 1.05],
+  macie: [5.15, 1.15, -0.35],
+  config: [7.15, 1.15, -0.35],
+  cloudtrail: [5.15, 1.15, -1.75],
+  s3: [7.15, 1.15, -1.75],
 }
 
 export function getSecurityOccupantPosition(occupant: CityOccupant): [number, number, number] {
