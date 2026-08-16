@@ -140,7 +140,9 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
   if (occupant.id === 'lambda-vpc') chips.push('in VPC')
   if (occupant.id === 'asg') chips.push('AWS', 'group')
   if (occupant.id === 'cloudwatch') chips.push('AWS', 'metrics')
-  if (occupant.id === 'dynamodb') chips.push('AWS', 'managed')
+  if (occupant.id === 'dynamodb') {
+    chips.push('AWS', sceneView === 'database-city' ? 'serverless' : 'managed')
+  }
   if (occupant.id === 'batch' && !occupant.az) chips.push('AWS', 'scheduler')
   if (occupant.serviceId === 'ecs' && occupant.az) chips.push('task')
   if (occupant.serviceId === 's3' && !occupant.az) {
@@ -149,9 +151,22 @@ function LocationSection({ occupant }: { occupant: CityOccupant }) {
         ? ['region', 'origin']
         : sceneView === 'storage-city'
           ? ['region', 'object']
-          : ['AWS', 'event']),
+          : sceneView === 'database-city'
+            ? ['region', 'COPY']
+            : ['AWS', 'event']),
     )
   }
+  if (occupant.serviceId === 'rds') chips.push('RDB', 'multi-AZ')
+  if (occupant.serviceId === 'aurora') chips.push('cluster', 'multi-AZ')
+  if (occupant.serviceId === 'elasticache') chips.push('cache', 'in VPC')
+  if (occupant.serviceId === 'memorydb') chips.push('durable', 'in VPC')
+  if (occupant.serviceId === 'redshift') chips.push('warehouse', 'in VPC')
+  if (occupant.serviceId === 'neptune') chips.push('graph', 'in VPC')
+  if (occupant.serviceId === 'documentdb') chips.push('document', 'in VPC')
+  if (occupant.serviceId === 'keyspaces') chips.push('AWS', 'serverless', 'cassandra')
+  if (occupant.serviceId === 'timestream') chips.push('AWS', 'serverless', 'timeseries')
+  if (occupant.serviceId === 'kinesis') chips.push('AWS', 'stream')
+  if (occupant.serviceId === 'quicksight') chips.push('AWS', 'BI')
   if (occupant.serviceId === 'ebs') chips.push('block', 'same-AZ')
   if (occupant.serviceId === 'efs') chips.push('NFS', 'multi-AZ')
   if (occupant.serviceId === 'fsx') chips.push('file')
